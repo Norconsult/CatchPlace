@@ -17,13 +17,26 @@ angular.module('processApp')
 
 
             $scope.initMap = function(){
-                $("#map").height($(document).height());
+                // Set with and height
+                $("#map").height($(document).height() - $("[header-panel]").height());
                 $("#map").width($(document).width());
 
+                var projections = {
+                    'EPSG:25832': { extent: [-2000000.0, 3500000.0, 3545984.0, 9045984.0] },
+                    'EPSG:32632': { extent: [-2000000.0, 3500000.0, 3545984.0, 9045984.0] },
+                    'EPSG:25833': { extent: [-2500000.0, 3500000.0, 3045984.0, 9045984.0] },
+                    'EPSG:32633': { extent: [-2500000.0, 3500000.0, 3045984.0, 9045984.0] },
+                    'EPSG:25835': { extent: [-3500000.0, 3500000.0, 2045984.0, 9045984.0] },
+                    'EPSG:32635': { extent: [-3500000.0, 3500000.0, 2045984.0, 9045984.0] },
+                    'EPSG:4326': { extent: [-180, -90, 180, 90] },
+                    'EPSG:900913': { extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34] }
+                };
+
+                var epsgcode = 'EPSG:900913';
+
                 var projection = new ol.proj.Projection({
-                    code: 'EPSG:32633',
-                    extent: [-2500000, 3500000, 3045984, 9045984], //UTM32
-                    //extent: [-2000000, 3500000, 3545984, 9045984],  //UTM33
+                    code: epsgcode,
+                    extent: projections[epsgcode].extent,
                     units: 'm'
                 });
                 ol.proj.addProjection(projection);
