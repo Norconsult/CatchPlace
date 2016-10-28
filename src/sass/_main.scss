@@ -420,4 +420,11 @@ html{
   top: 0;
 }
 
+.buttonsOverlay{
+  left: 10px;
+  top: 20px;
+  z-index: 10;
+  position: absolute;
+}
+
 @import "dropdownmenu";

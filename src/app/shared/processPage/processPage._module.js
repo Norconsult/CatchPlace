@@ -1,1 +1,1 @@
-angular.module('processPage', []);
+angular.module('processPage', ['buttonsOverlay']);

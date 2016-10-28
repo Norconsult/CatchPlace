@@ -92,7 +92,8 @@ module.exports = {
         'src/app/shared/authorizationPage/**/*.js',
         'src/app/shared/header/headerPanel/**/*.js',
         'src/app/shared/header/headerMenuLeft/**/*.js',
-        'src/app/shared/header/headerMenuRight/**/*.js'
+        'src/app/shared/header/headerMenuRight/**/*.js',
+        'src/app/components/overlays/**/*.js'
     ],
     source_css: [
         '*.css'
