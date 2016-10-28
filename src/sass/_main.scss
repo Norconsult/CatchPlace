@@ -420,6 +420,15 @@ html{
   top: 0;
 }
 
+.mousePosition{
+  position: fixed;
+  bottom: 3px;
+  color: #ffffff;
+  right: 3px;
+  background-color: rgba(32,170,172,0.9);
+  padding: 0 5px 0 5px;
+}
+
 .buttonsOverlay{
   left: 10px;
   top: 20px;
