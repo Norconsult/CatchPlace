@@ -1,6 +1,6 @@
 angular.module('processApp')
-    .controller('processAppController', ['$scope','$location','$timeout',
-        function($scope,$location,$timeout){
+    .controller('processAppController', ['$scope','$location','$timeout','$http'
+        function($scope,$location,$timeout,$http){
             var map;
 
             var projections = {
@@ -92,15 +92,15 @@ angular.module('processApp')
                         }
                     }
                 };
-                placeNameServices.forEach(function(service){
-                    var bbox=service.bbox.minx + '=' + extent[0] +
-                        service.bbox.miny + '=' + extent[1] +
-                        service.bbox.maxx + '=' + extent[2] +
-                        service.bbox.maxy + '=' + extent[3];
-                    var url=service.url + bbox;
-                    $http.get(url);
+                var service=placeNameServices.ssr;
+                var bbox=service.bbox.minx + '=' + extent[0] +
+                    service.bbox.miny + '=' + extent[1] +
+                    service.bbox.maxx + '=' + extent[2] +
+                    service.bbox.maxy + '=' + extent[3];
+                var url=service.url + bbox;
+                $http.get(url);
 
-                });
+
             };
 
             var _mapMoveend = function(){
