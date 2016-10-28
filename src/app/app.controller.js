@@ -54,7 +54,7 @@ angular.module('processApp')
                     'EPSG:900913': { extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34] }
                 };
 
-                var epsgcode = 'EPSG:32632';
+                var epsgcode = 'EPSG:25833';
 
                 var projection = new ol.proj.Projection({
                     code: epsgcode,
