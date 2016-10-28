@@ -221,12 +221,6 @@ angular.module('processApp')
                 return  new ol.extent.buffer(centerExtent,radius);
             };
 
-            var _mapMoveend = function(){
-                var bbox=_createSelectBox(map.getView().getCenter(), 1000);
-                _getPlacenames(bbox);
-                map.un('moveend',_mapMoveend);
-            };
-
             var _transformCoordinates = function(fromEpsg, toEpsg, coordinates){
                 if (fromEpsg && toEpsg && coordinates) {
                     if (proj4.defs(fromEpsg) && proj4.defs(toEpsg)) {
@@ -308,7 +302,6 @@ angular.module('processApp')
                     controls: [],
                     overlays: []
                 });
-                map.on('moveend', _mapMoveend);
 
                 var select = new ol.interaction.Select({
                     condition: ol.events.condition.click
@@ -322,15 +315,19 @@ angular.module('processApp')
             };
 
             function _delayedClosestPlacename(layer, center){
-                var bbox=_createSelectBox(center, 1000);
-                _getPlacenames(bbox);
-                console.log(center);
+                _getPlacenamesByBbox(center);
                 var source = layer.getSource();
                 var closestFeature = source.getClosestFeatureToCoordinate(center);
                 console.log(closestFeature);
             }
 
+            function _getPlacenamesByBbox(center) {
+                var bbox=_createSelectBox(center, 1000);
+                _getPlacenames(bbox);
+            }
+
             function _selectClosestPlacename(center){
+                _getPlacenamesByBbox(center);
                 var layer = geojsonlayer['ssr'];
                 if (layer) {
                     _delayedClosestPlacename(layer, center);
