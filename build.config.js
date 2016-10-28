@@ -27,7 +27,7 @@ module.exports = {
         atpl: [ 'src/app/**/*.html', 'src/app/**/*.tpl.html' ],
         ctpl: [ 'src/common/**/*.tpl.html' ],
 
-        html: [ 'src/index.html'],
+        html: [ 'src/index.html' ],
         sass: 'src/sass/main.scss'
     },
 
@@ -66,6 +66,7 @@ module.exports = {
             'vendor/bootstrap/dist/js/bootstrap.min.js',
             'vendor/angular-translate/angular-translate.js',
             'vendor/es5-shim/es5-shim.js',
+            'vendor/openlayers3/ol.js',
             'vendor/backendless/libs/backendless.js'
         ],
         css: [
