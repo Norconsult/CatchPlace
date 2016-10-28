@@ -76,6 +76,10 @@ angular.module('processApp')
                 return sources;
             };
 
+            var _mapMoveend = function(){
+                console.log(map.getView().calculateExtent(map.getSize()));
+            };
+
             $scope.initMap = function(){
 
 
@@ -149,6 +153,7 @@ angular.module('processApp')
                     controls: [],
                     overlays: []
                 });
+                map.on('moveend', _mapMoveend);
             };
 
             $(document).ready(function(){
