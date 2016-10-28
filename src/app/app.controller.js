@@ -314,6 +314,7 @@ angular.module('processApp')
                     console.log(e.selected);
                 });
                 processAppFactory.registerMousePositionControl(map, '');
+                processAppFactory.getGeolocation(map);
             };
 
             $scope.redrawMap = function(){
