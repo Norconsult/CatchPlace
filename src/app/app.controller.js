@@ -76,9 +76,30 @@ angular.module('processApp')
                 return sources;
             };
 
-            var getPlacenames = function (extent) {
+            var _readGeometryFromPlacenames = function (jsonObject, service) {
+                var placenames=[];
+                for (var i = 0; i < jsonObject.length; i++){
+                    placenames.push({
+                        name: jsonObject[i][service.name],
+                        point: [
+                            jsonObject[i][service.lon],
+                            jsonObject[i][service.lat]
+                        ]
+                    });
+                }
+                console.log(placenames);
+            };
+
+            var _readPlacenames = function (result, service) {
+                var jsonObject=result.data;
+                _readGeometryFromPlacenames(jsonObject[service.root], service);
+            };
+
+            var _getPlacenames = function (extent) {
                 var placeNameServices = {
                     ssr: {
+                        source: 'ssr',
+                        root: 'stedsnavn',
                         url: 'https://ws.geonorge.no/SKWS3Index/ssr/sok?',
                         lat: 'nord',
                         lon: 'aust',
@@ -89,24 +110,26 @@ angular.module('processApp')
                             maxx: 'ostUR',
                             maxy: 'nordUR',
                             name: undefined
-                        }
+                        },
+                        epsg: 'EPSG:32633'
                     }
                 };
-                var service=placeNameServices.ssr;
-                var bbox=service.bbox.minx + '=' + extent[0] + '&' +
+                var service = placeNameServices.ssr;
+                var bbox = service.bbox.minx + '=' + extent[0] + '&' +
                     service.bbox.miny + '=' + extent[1] + '&' +
                     service.bbox.maxx + '=' + extent[2] + '&' +
                     service.bbox.maxy + '=' + extent[3];
-                var url=service.url + bbox;
-                console.log($http.get(url));
-
-
+                var url = service.url + bbox;
+                $http.get(url).then(function (result) {
+                        _readPlacenames(result, service);
+                    }
+                );
             };
 
             var _mapMoveend = function(){
                 console.log(map.getView().calculateExtent(map.getSize()));
-                map.un('moveend', _mapMoveend);
-                getPlacenames(map.getView().calculateExtent(map.getSize()));
+                //map.un('moveend', _mapMoveend);
+                _getPlacenames(map.getView().calculateExtent(map.getSize()));
             };
 
             $scope.initMap = function(){
