@@ -139,11 +139,9 @@ angular.module('processApp')
 
             var _mapMoveend = function(){
                 console.log(map.getView().calculateExtent(map.getSize()));
-                //map.un('moveend', _mapMoveend);
                 _getPlacenames(map.getView().calculateExtent(map.getSize()));
                 var test = _transformCoordinates(mapsrs, 'EPSG:4326', map.getView().getCenter());
                 console.log(test);
-                map.un('moveend', _mapMoveend);
             };
 
             var _transformCoordinates = function(fromEpsg, toEpsg, coordinates){
