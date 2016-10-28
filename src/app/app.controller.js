@@ -83,7 +83,9 @@ angular.module('processApp')
                     features.push({
                         type: "Feature",
                         properties: {
-                            name: jsonObject[i][service.name]
+                            name: jsonObject[i][service.name],
+                            id: jsonObject[i][service.id],
+                            type: jsonObject[i][service.type]
                         },
 
                         geometry: {
@@ -114,7 +116,9 @@ angular.module('processApp')
                 var placeNameServices = {
                     ssr: {
                         source: 'ssr',
+                        id: 'ssrId',
                         root: 'stedsnavn',
+                        type: 'navnetype',
                         url: 'https://ws.geonorge.no/SKWS3Index/ssr/sok?',
                         lat: 'nord',
                         lon: 'aust',
@@ -126,7 +130,7 @@ angular.module('processApp')
                             maxy: 'nordUR',
                             name: undefined
                         },
-                        epsg: 'EPSG:32633'
+                        epsg: 'EPSG:25833'
                     }
                 };
                 var service = placeNameServices.ssr;
