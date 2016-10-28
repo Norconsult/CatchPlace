@@ -20,7 +20,7 @@ angular.module('buttonsOverlay')
                         latitude: 66,
                         longitude: 14,
                         categories: ["catched_places"],
-                        metadata: {"pictureId":"XXXX-XXXX-XXXX-XXXX"}
+                        metadata: {"ownerId":"XXXX-XXXX-XXXX-XXXX"}
                     };
 
 

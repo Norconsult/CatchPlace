@@ -1,6 +1,6 @@
 angular.module('processApp')
-    .controller('processAppController', ['$scope','$location',
-        function($scope,$location){
+    .controller('processAppController', ['$scope','$location','$timeout',
+        function($scope,$location,$timeout){
             var map;
 
             var projections = {
@@ -17,10 +17,19 @@ angular.module('processApp')
 
             $scope.showMainPage = function(){
                 $scope.layout = "mainPage";
+                $timeout(function() {
+                    $scope.$apply(function () {
+                        $scope.initMap();
+                    },0);
+                },5);
             };
 
             $scope.showAuthorizationPage = function(){
                 $scope.layout = "authorizationPage";
+            };
+
+            $scope.showCreateAccoutPage = function () {
+                $scope.layout = "createAccountPage";
             };
 
             $scope.layout = "mainPage";
