@@ -15,11 +15,33 @@ angular.module('processApp')
 
             $scope.layout = "mainPage";
 
+            var _createLayer = function(config){
+                return new ol.layer.Tile({
+                    source: new ol.source.TileWMS({
+                        params: {
+                            LAYERS: config.layers,
+                            VERSION: config.version,
+                            FORMAT: config.format
+                        },
+                        url: config.url,
+                        crossOrigin: null,
+                        transparent: true
+                    })
+                });
+            };
+
+            var _createLayers = function(config){
+                var sources = [];
+                config.forEach(function(element){
+                    sources.push(_createLayer(element));
+                });
+                return sources;
+            };
 
             $scope.initMap = function(){
                 // Set with and height
-                $("#map").height($(document).height() - $("[header-panel]").height());
-                $("#map").width($(document).width());
+                $('#map').height($(document).height() - $('[header-panel]').height());
+                $('#map').width($(document).width());
 
                 var projections = {
                     'EPSG:25832': { extent: [-2000000.0, 3500000.0, 3545984.0, 9045984.0] },
@@ -32,7 +54,7 @@ angular.module('processApp')
                     'EPSG:900913': { extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34] }
                 };
 
-                var epsgcode = 'EPSG:900913';
+                var epsgcode = 'EPSG:32632';
 
                 var projection = new ol.proj.Projection({
                     code: epsgcode,
@@ -41,20 +63,21 @@ angular.module('processApp')
                 });
                 ol.proj.addProjection(projection);
 
-                var rastersource = new ol.source.TileWMS({
-                    params: {
-                        LAYERS: 'egk',//'topo2',
-                        VERSION: '1.1.1',
-                        FORMAT: 'image/png'
+                var maplayers = [
+                    {
+                        layers: 'egk',
+                        //layers: 'topo2',
+                        version: '1.1.1',
+                        format: 'image/png',
+                        url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open?'
                     },
-                    url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open?',
-                    crossOrigin: null,
-                    transparent: true
-                });
-
-                var raster = new ol.layer.Tile({
-                    source: rastersource
-                });
+                    {
+                        layers: 'GPI13klasser_fill',
+                        version: '1.1.1',
+                        format: 'image/png',
+                        url: 'http://wms.skogoglandskap.no/cgi-bin/ar5gpi?'
+                    }
+                ];
 
                 var numZoomLevels = 18;
                 var newMapRes = [];
@@ -67,13 +90,13 @@ angular.module('processApp')
                 }
                 var mapResolutions = newMapRes;
                 map = new ol.Map({
-                    layers: [raster],
+                    layers: _createLayers(maplayers),
                     loadTilesWhileAnimating: true,
                     target: 'map',
                     view: new ol.View({
                         projection: projection,
                         center: [569517, 7034234],
-                        zoom: 2,
+                        zoom: 5,
                         resolutions: mapResolutions,
                         maxResolution: newMapRes[0],
                         numZoomLevels: numZoomLevels
