@@ -6,5 +6,6 @@ angular.module('processApp', [
     'headerMenuLeft',
     'headerMenuRight',
     'authorizationPage',
+    'createAccountPage',
     'processPage'
 ]);

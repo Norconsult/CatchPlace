@@ -1,16 +1,25 @@
 angular.module('processApp')
-    .controller('processAppController', ['$scope',
-        function($scope){
+    .controller('processAppController', ['$scope','$timeout',
+        function($scope, $timeout){
             var map;
 
             Backendless.initApp( "7DB77AF0-F276-073B-FFC2-0B2AA0A2E900", "E48F463B-8606-F4E3-FFA9-A8756155BC00", "v1" );
 
             $scope.showMainPage = function(){
                 $scope.layout = "mainPage";
+                $timeout(function() {
+                    $scope.$apply(function () {
+                        $scope.initMap();
+                    },0);
+                },5);
             };
 
             $scope.showAuthorizationPage = function(){
                 $scope.layout = "authorizationPage";
+            };
+
+            $scope.showCreateAccoutPage = function () {
+                $scope.layout = "createAccountPage";
             };
 
             $scope.layout = "mainPage";

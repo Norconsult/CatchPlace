@@ -1,0 +1,29 @@
+<div class="login-panel">
+    <div class="login-header">
+        <span translate="login"></span>
+    </div>
+    <div class="login-content">
+        <form>
+            <div class="field-group">
+                <label for="usernameInput" translate="username"></label>
+                <input class="login-input" id="usernameInput" type="text" ng-model="username">
+            </div>
+            <div class="field-group">
+                <label for="passwordInput" translate="password"></label>
+                <input class="login-input" id="passwordInput" type="password" ng-model="password">
+            </div>
+            <div class="field-group">
+                <label for="passwordInput">Password again</label>
+                <input class="login-input" id="passwordInputAgain" type="password" ng-model="passwordAgain">
+            </div>
+
+            <div class="field-group">
+                <button class="btn btn-default authorization-button max-width-button" ng-click="registerUser()">Register user</button>
+            </div>
+            <div class="field-group">
+                <button class="btn btn-default authorization-button max-width-button" ng-click="cancel()" translate="cancel"></button>
+            </div>
+
+        </form>
+    </div>
+</div>

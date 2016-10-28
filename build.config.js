@@ -90,6 +90,7 @@ module.exports = {
         'src/app/shared/isyTranslate/**/*.js',
         'src/app/shared/processPage/**/*.js',
         'src/app/shared/authorizationPage/**/*.js',
+        'src/app/shared/createAccountPage/**/*.js',
         'src/app/shared/header/headerPanel/**/*.js',
         'src/app/shared/header/headerMenuLeft/**/*.js',
         'src/app/shared/header/headerMenuRight/**/*.js',
