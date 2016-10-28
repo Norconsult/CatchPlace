@@ -154,7 +154,8 @@ angular.module('processApp')
                 var jsonObject=result.data;
                 var uniqueResults={};
                 jsonObject[service.root].forEach(function(placename){
-                    uniqueResults[placename[service.name]]=placename;
+                    var concatinatedCoordinates=placename[service.lon].split('.')[0]+placename[service.lat].split('.')[0];
+                    uniqueResults[placename[service.name]+concatinatedCoordinates]=placename;
                 });
                 _readGeometryFromPlacenames(uniqueResults, service);
             };
