@@ -78,6 +78,7 @@ angular.module('processApp')
 
             var _mapMoveend = function(){
                 console.log(map.getView().calculateExtent(map.getSize()));
+                map.un('moveend', _mapMoveend);
             };
 
             $scope.initMap = function(){
