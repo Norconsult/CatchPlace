@@ -21,7 +21,7 @@ angular.module('processApp')
                 $scope.layout = "mainPage";
                 $timeout(function() {
                     $scope.$apply(function () {
-                        $scope.initMap();
+                        $scope.redrawMap();
                     },0);
                 },5);
             };
@@ -283,6 +283,12 @@ angular.module('processApp')
                 });
                 map.on('moveend', _mapMoveend);
                 map.on('moveend', _drawGeoJson);
+            };
+
+            $scope.redrawMap = function(){
+                map = undefined;
+                geojsonlayer = undefined;
+                $scope.initMap();
             };
 
             $(document).ready(function(){
