@@ -25,6 +25,7 @@ angular.module('headerMenuRight')
 
                     scope.logOut = function () {
                         processAppFactory.setUserName("");
+                        processAppFactory.setUserObjectId("");
                         Backendless.UserService.logout();
                     };
 
