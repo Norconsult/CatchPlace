@@ -187,7 +187,7 @@ angular.module('processApp')
                 var placeNameServices = {
                     ssr: {
                         source: 'ssr',
-                        id: 'stedsnummer',
+                        id: 'ssrId',
                         root: 'stedsnavn',
                         type: 'navnetype',
                         url: 'https://ws.geonorge.no/SKWS3Index/ssr/sok?',
@@ -216,11 +216,15 @@ angular.module('processApp')
                 );
             };
 
+            var _createSelectBox = function (center, radius) {
+                var centerExtent=new ol.geom.Point(center).getExtent();
+                return  new ol.extent.buffer(centerExtent,radius);
+            };
+
             var _mapMoveend = function(){
-                //console.log(map.getView().calculateExtent(map.getSize()));
-                _getPlacenames(map.getView().calculateExtent(map.getSize()));
-                // var test = _transformCoordinates(mapsrs, 'EPSG:4326', map.getView().getCenter());
-                // console.log(test);
+                var bbox=_createSelectBox(map.getView().getCenter(), 1000);
+                _getPlacenames(bbox);
+                map.un('moveend',_mapMoveend);
             };
 
             var _transformCoordinates = function(fromEpsg, toEpsg, coordinates){
@@ -253,28 +257,28 @@ angular.module('processApp')
                         layers: 'egk',
                         version: '1.1.1',
                         format: 'image/png',
-                        url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open?',
+                        url: 'https://opencache.statkart.no/gatekeeper/gk/gk.open?',
                         visible: true
                     },
                     {
                         layers: 'topo2',
                         version: '1.1.1',
                         format: 'image/png',
-                        url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open?',
+                        url: 'https://opencache.statkart.no/gatekeeper/gk/gk.open?',
                         visible: false
                     },
                     {
                         layers: 'topo2graatone',
                         version: '1.1.1',
                         format: 'image/png',
-                        url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open?',
+                        url: 'https://opencache.statkart.no/gatekeeper/gk/gk.open?',
                         visible: true
                     },
                     {
                         layers: 'GPI13klasser_fill',
                         version: '1.1.1',
                         format: 'image/png',
-                        url: 'http://wms.skogoglandskap.no/cgi-bin/ar5gpi?',
+                        url: 'https://wms.skogoglandskap.no/cgi-bin/ar5gpi?',
                         visible: false
                     }
                 ];
@@ -314,7 +318,28 @@ angular.module('processApp')
                     console.log(e.selected);
                 });
                 processAppFactory.registerMousePositionControl(map, '');
+                processAppFactory.getGeolocation(map, _selectClosestPlacename);
             };
+
+            function _delayedClosestPlacename(layer, center){
+                var bbox=_createSelectBox(center, 1000);
+                _getPlacenames(bbox);
+                console.log(center);
+                var source = layer.getSource();
+                var closestFeature = source.getClosestFeatureToCoordinate(center);
+                console.log(closestFeature);
+            }
+
+            function _selectClosestPlacename(center){
+                var layer = geojsonlayer['ssr'];
+                if (layer) {
+                    _delayedClosestPlacename(layer, center);
+                } else {
+                    $timeout(function(){
+                        _selectClosestPlacename(center);
+                    }, 50);
+                }
+            }
 
             $scope.redrawMap = function(){
                 map = undefined;
