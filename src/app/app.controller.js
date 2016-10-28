@@ -164,7 +164,7 @@ angular.module('processApp')
                 var placeNameServices = {
                     ssr: {
                         source: 'ssr',
-                        id: 'ssrId',
+                        id: 'stedsnummer',
                         root: 'stedsnavn',
                         type: 'navnetype',
                         url: 'https://ws.geonorge.no/SKWS3Index/ssr/sok?',
