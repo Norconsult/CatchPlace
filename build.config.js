@@ -65,7 +65,8 @@ module.exports = {
             'vendor/angular-route/angular-route.js',
             'vendor/bootstrap/dist/js/bootstrap.min.js',
             'vendor/angular-translate/angular-translate.js',
-            'vendor/es5-shim/es5-shim.js'
+            'vendor/es5-shim/es5-shim.js',
+            'vendor/backendless/libs/backendless.js'
         ],
         css: [
             'vendor/bootstrap/dist/css/bootstrap.min.css'

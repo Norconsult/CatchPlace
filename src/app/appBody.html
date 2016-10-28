@@ -1,2 +1,4 @@
-<div process-page data-ng-show="showProcessPage()"></div>
-<div authorization-page data-ng-show="showAuthorizationPage()"></div>
+<div ng-switch="layout">
+    <div ng-switch-when="mainPage" process-page></div>
+    <div ng-switch-when="authorizationPage" authorization-page></div>
+</div>
