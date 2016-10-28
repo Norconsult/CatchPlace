@@ -78,17 +78,27 @@ angular.module('processApp')
             };
 
             var _readGeometryFromPlacenames = function (jsonObject, service) {
-                var placenames=[];
-                for (var i = 0; i < jsonObject.length; i++){
-                    placenames.push({
-                        name: jsonObject[i][service.name],
-                        point: [
-                            jsonObject[i][service.lon],
-                            jsonObject[i][service.lat]
-                        ]
+                var features = [];
+                for (var i = 0; i < jsonObject.length; i++) {
+                    features.push({
+                        type: "Feature",
+                        properties: {
+                            name: jsonObject[i][service.name]
+                        },
+
+                        geometry: {
+                            type: "Point",
+                            coordinates: [jsonObject[i][service.lon], jsonObject[i][service.lat]]
+                        }
+
                     });
                 }
-                console.log(placenames);
+                var featureCollection = {
+                    type: "FeatureCollection",
+                    features: features
+                };
+                console.log(featureCollection);
+
             };
 
             var _readPlacenames = function (result, service) {
@@ -131,9 +141,6 @@ angular.module('processApp')
                 console.log(map.getView().calculateExtent(map.getSize()));
                 //map.un('moveend', _mapMoveend);
                 _getPlacenames(map.getView().calculateExtent(map.getSize()));
-                var extent = map.getView().calculateExtent(map.getSize());
-                console.log(extent);
-                getPlacenames(extent);
                 var test = _transformCoordinates(mapsrs, 'EPSG:4326', map.getView().getCenter());
                 console.log(test);
                 map.un('moveend', _mapMoveend);
@@ -158,8 +165,8 @@ angular.module('processApp')
                 $('#map').width($(document).width());
 
                 var projection = new ol.proj.Projection({
-                    code: epsgcode,
-                    extent: projections[epsgcode].extent,
+                    code: mapsrs,
+                    extent: projections[mapsrs].extent,
                     units: 'm'
                 });
                 ol.proj.addProjection(projection);
