@@ -3,7 +3,7 @@ angular.module('processApp')
         function($scope,$location,$timeout,$http){
             var map;
             var mapsrs = 'EPSG:25833';
-            var geojsonlayer;
+            var geojsonlayer = {};
 
             var projections = {
                 'EPSG:25832': { defs: '+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', extent: [-2000000.0, 3500000.0, 3545984.0, 9045984.0], units: 'm' },
@@ -78,50 +78,62 @@ angular.module('processApp')
                 return sources;
             };
 
-            var _drawGeoJson = function(geoJson, overwrite){
-                if (geoJson.type !== undefined && typeof geoJson.type === 'string' && geoJson.type === 'moveend'){
-                    map.un('moveend', _drawGeoJson);
-                    // mock data
-                    geoJson = {
-                        'type': 'FeatureCollection',
-                        'crs': {
-                            'type': 'name',
-                            'properties': {
-                                'name': 'EPSG:3857'
+            $scope.drawBackendlessPoints = function(points){
+                if (points){
+                    var features = [];
+                    for (var i in points) {
+                        features.push({
+                            type: 'Feature',
+                            properties: {
+                                id: points[i].objectId
+                            },
+                            geometry: {
+                                type: 'Point',
+                                coordinates: _transformCoordinates('EPSG:4326', mapsrs, [points[i].longitude, points[i].latitude])
                             }
-                        },
-                        'features': [{
-                            'type': 'Feature',
-                            'geometry': {
-                                'type': 'Point',
-                                'coordinates': map.getView().getCenter()
-                            }
-                        }]
+                        });
+                    }
+                    var featureCollection = {
+                        type: 'FeatureCollection',
+                        features: features
                     };
+                    $scope.drawGeoJson(featureCollection, 'backendless', true);
                 }
+            };
 
-                if (geojsonlayer === undefined){
-                    geojsonlayer = new ol.layer.Vector({
-                        source: new ol.source.Vector({
-                            format: new ol.format.GeoJSON()
-                        }),
-                        style: new ol.style.Style({
+            var _getLayerStyle = function(layername) {
+                switch (layername.toLowerCase()){
+                    case 'backendless':
+                        return new ol.style.Style({
                             image: new ol.style.Circle({
                                 radius: 5,
                                 fill: new ol.style.Stroke({color: [255, 0, 0, 0.5]}),
                                 stroke: new ol.style.Stroke({color: 'red', width: 1})
                             })
-                        })
+                        });
+                    default:
+                        break;
+                }
+            };
+
+            $scope.drawGeoJson = function(geoJson, layername, overwrite){
+                if (geojsonlayer[layername] === undefined){
+                    var style = _getLayerStyle(layername);
+                    geojsonlayer[layername] = new ol.layer.Vector({
+                        source: new ol.source.Vector({
+                            format: new ol.format.GeoJSON()
+                        }),
+                        style: style
                     });
-                    map.addLayer(geojsonlayer);
+                    map.addLayer(geojsonlayer[layername]);
                 }
 
                 var geoJsonParser = new ol.format.GeoJSON();
                 var features = geoJsonParser.readFeatures(geoJson);
                 if (overwrite){
-                    geojsonlayer.getSource().clear();
+                    geojsonlayer[layername].getSource().clear();
                 }
-                geojsonlayer.getSource().addFeatures(features);
+                geojsonlayer[layername].getSource().addFeatures(features);
             };
 
             var _readGeometryFromPlacenames = function (jsonObject, service) {
@@ -146,8 +158,7 @@ angular.module('processApp')
                     type: "FeatureCollection",
                     features: features
                 };
-                console.log(featureCollection);
-                _drawGeoJson(featureCollection, true);
+                $scope.drawGeoJson(featureCollection, 'ssr', true);
             };
 
             var _readPlacenames = function (result, service) {
@@ -194,10 +205,10 @@ angular.module('processApp')
             };
 
             var _mapMoveend = function(){
-                console.log(map.getView().calculateExtent(map.getSize()));
+                //console.log(map.getView().calculateExtent(map.getSize()));
                 _getPlacenames(map.getView().calculateExtent(map.getSize()));
-                var test = _transformCoordinates(mapsrs, 'EPSG:4326', map.getView().getCenter());
-                console.log(test);
+                // var test = _transformCoordinates(mapsrs, 'EPSG:4326', map.getView().getCenter());
+                // console.log(test);
             };
 
             var _transformCoordinates = function(fromEpsg, toEpsg, coordinates){
@@ -282,12 +293,11 @@ angular.module('processApp')
                     overlays: []
                 });
                 map.on('moveend', _mapMoveend);
-                map.on('moveend', _drawGeoJson);
             };
 
             $scope.redrawMap = function(){
                 map = undefined;
-                geojsonlayer = undefined;
+                geojsonlayer = {};
                 $scope.initMap();
             };
 

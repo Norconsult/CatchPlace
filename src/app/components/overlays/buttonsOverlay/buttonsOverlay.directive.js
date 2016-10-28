@@ -20,6 +20,7 @@ angular.module('buttonsOverlay')
                                 alert( "error - " + result.message );
                             });
 
+
                         var point = {
                             latitude: 66,
                             longitude: 14,
@@ -34,8 +35,7 @@ angular.module('buttonsOverlay')
                         var callback = new Backendless.Async(
                             function(result)
                             {
-                                alert( "found geo points - " + result.data.length );
-                                console.log(result.data);
+                                scope.drawBackendlessPoints(result.data);
                             },
                             function(result)
                             {
@@ -46,7 +46,7 @@ angular.module('buttonsOverlay')
                         {
                             categories: ["catched_places"]
                         };
-                        console.log("ownerId: ", processAppFactory.getUserObjectId());
+                        //console.log("ownerId: ", processAppFactory.getUserObjectId());
                         Backendless.Geo.find( geoQuery, callback );
                     };
 
