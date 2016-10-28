@@ -6,6 +6,20 @@ angular.module('processApp')
             var userObjectId = "";
             var userName = "";
 
+            function _guid() {
+                function s4() {
+                    return Math.floor((1 + Math.random()) * 0x10000)
+                        .toString(16)
+                        .substring(1);
+                }
+                return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                    s4() + '-' + s4() + s4() + s4();
+            }
+
+            var pictureGuid = '';
+            var oldFileName = '';
+            var newFileName = '';
+
             return {
                 setUserObjectId: function (value) {
                     userObjectId = value;
@@ -20,6 +34,30 @@ angular.module('processApp')
 
                 getUserName: function () {
                     return userName;
+                },
+
+                generatePictureGuid: function () {
+                    pictureGuid = _guid();
+                },
+
+                getPictureGuid: function () {
+                    return pictureGuid;
+                },
+
+                setOldFileName: function (value) {
+                      oldFileName = value;
+                },
+
+                getOldFileName: function () {
+                    return oldFileName;
+                },
+
+                setNewFileName: function (value) {
+                    newFileName = value;
+                },
+
+                getNewFileName: function () {
+                    return newFileName;
                 },
 
                 registerMousePositionControl: function(map, prefix){

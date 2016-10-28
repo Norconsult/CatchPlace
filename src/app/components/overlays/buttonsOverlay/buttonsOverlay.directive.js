@@ -1,15 +1,23 @@
 angular.module('buttonsOverlay')
-    .directive('buttonsOverlay', ['processAppFactory',
-        function(processAppFactory) {
+    .directive('buttonsOverlay', ['processAppFactory','$timeout',
+        function(processAppFactory, $timeout) {
             return {
                 templateUrl: 'components/overlays/buttonsOverlay/buttonsOverlay.html',
                 restrict: 'A',
                 link: function(scope){
 
+                    function _guid() {
+                        function s4() {
+                            return Math.floor((1 + Math.random()) * 0x10000)
+                                .toString(16)
+                                .substring(1);
+                        }
+                        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                            s4() + '-' + s4() + s4() + s4();
+                    }
+                    
 
-
-
-                    scope.addPoint = function () {
+                    scope.addPoint =    function () {
                         var callback = new Backendless.Async(
                             function( result )
                             {
@@ -25,7 +33,7 @@ angular.module('buttonsOverlay')
                             latitude: 66,
                             longitude: 14,
                             categories: ["catched_places"],
-                            metadata: {ownerId:processAppFactory.getUserObjectId()}
+                            metadata: {ownerId:processAppFactory.getUserObjectId(), pointGuid: _guid(), pictureGuid: "123"}
                         };
 
                         Backendless.Geo.addPoint( point, callback );
@@ -35,6 +43,7 @@ angular.module('buttonsOverlay')
                         var callback = new Backendless.Async(
                             function(result)
                             {
+                                console.log("result.data: ", result.data.length);
                                 scope.drawBackendlessPoints(result.data);
                             },
                             function(result)
@@ -60,17 +69,38 @@ angular.module('buttonsOverlay')
 
                     scope.uploadFileFunc = function () {
 
+                        // var callback =
+                            // function()
+                            // {
+                            //     Backendless.Files.renameFile( "/my-folder/"+processAppFactory.getOldFileName(), processAppFactory.getNewFileName() );
+                            // };
                         var callback = {};
 
-                        callback.success = function (result) {
-                            alert("File successfully uploaded. Path to download: " + result.fileURL);
+                        callback.success = function(result)
+                        {
+                            alert( "File successfully uploaded. Path to download: " + result.fileURL );
                         };
 
-                        callback.fault = function (result) {
-                            alert("error - " + result.message);
+                        callback.fault = function(result)
+                        {
+                            alert( "error - " + result.message );
                         };
+
+                        var fileSplitName = files[0].name.split(".");
+
+                        processAppFactory.generatePictureGuid();
+
+                        // console.log("Test: ", processAppFactory.getPictureGuid() + "." + fileSplitName[fileSplitName.length -1]);
+
+                        processAppFactory.setOldFileName(files[0].name);
+                        processAppFactory.setNewFileName(processAppFactory.getPictureGuid() + "." + fileSplitName[fileSplitName.length -1]);
 
                         Backendless.Files.upload(files, "my-folder", callback);
+
+                        $timeout(function() {
+                            Backendless.Files.renameFile( "/my-folder/"+processAppFactory.getOldFileName(), processAppFactory.getNewFileName() );
+                        },2000);
+
                     };
 
                 }
