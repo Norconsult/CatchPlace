@@ -1,5 +1,5 @@
 angular.module('processApp')
-    .controller('processAppController', ['$scope','$location','$timeout','$http'
+    .controller('processAppController', ['$scope','$location','$timeout','$http',
         function($scope,$location,$timeout,$http){
             var map;
 
@@ -93,12 +93,12 @@ angular.module('processApp')
                     }
                 };
                 var service=placeNameServices.ssr;
-                var bbox=service.bbox.minx + '=' + extent[0] +
-                    service.bbox.miny + '=' + extent[1] +
-                    service.bbox.maxx + '=' + extent[2] +
+                var bbox=service.bbox.minx + '=' + extent[0] + '&' +
+                    service.bbox.miny + '=' + extent[1] + '&' +
+                    service.bbox.maxx + '=' + extent[2] + '&' +
                     service.bbox.maxy + '=' + extent[3];
                 var url=service.url + bbox;
-                $http.get(url);
+                console.log($http.get(url));
 
 
             };
