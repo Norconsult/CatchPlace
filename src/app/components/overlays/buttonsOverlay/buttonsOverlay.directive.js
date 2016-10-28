@@ -51,6 +51,28 @@ angular.module('buttonsOverlay')
                         Backendless.Geo.find( geoQuery, callback );
                     };
 
+                    document.getElementById('files').addEventListener('change', handleFileSelect, false);
+
+                    function handleFileSelect(evt)
+                    {
+                        files = evt.target.files; // FileList object
+                    }
+
+                    scope.uploadFileFunc = function () {
+
+                        var callback = {};
+
+                        callback.success = function (result) {
+                            alert("File successfully uploaded. Path to download: " + result.fileURL);
+                        };
+
+                        callback.fault = function (result) {
+                            alert("error - " + result.message);
+                        };
+
+                        Backendless.Files.upload(files, "my-folder", callback);
+                    };
+
                 }
             };
         }]);
