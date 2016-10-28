@@ -76,8 +76,36 @@ angular.module('processApp')
                 return sources;
             };
 
+            var getPlacenames = function (extent) {
+                var placeNameServices = {
+                    ssr: {
+                        url: 'https://ws.geonorge.no/SKWS3Index/ssr/sok?',
+                        lat: 'nord',
+                        lon: 'aust',
+                        name: 'stedsnavn',
+                        bbox: {
+                            minx: 'ostLL',
+                            miny: 'nordLL',
+                            maxx: 'ostUR',
+                            maxy: 'nordUR',
+                            name: undefined
+                        }
+                    }
+                };
+                placeNameServices.forEach(function(service){
+                    var bbox=service.bbox.minx + '=' + extent[0][0] +
+                        service.bbox.miny + '=' + extent[0][0] +
+                        service.bbox.maxx + '=' + extent[0][0] +
+                        service.bbox.maxy + '=' + extent[0][0];
+                    var url=service.url + bbox;
+                    $http.get(url);
+
+                });
+            };
+
             var _mapMoveend = function(){
                 console.log(map.getView().calculateExtent(map.getSize()));
+                getPlacenames(map.getView().calculateExtent(map.getSize()));
             };
 
             $scope.initMap = function(){
