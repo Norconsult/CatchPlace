@@ -17,10 +17,10 @@ angular.module('buttonsOverlay')
                         });
 
                     var point = {
-                        latitude: 20,
-                        longitude: 30,
-                        categories: ["restaurants", "cool_places"],
-                        metadata: {"owner":"XXXX-XXXX-XXXX-XXXX"}
+                        latitude: 66,
+                        longitude: 14,
+                        categories: ["catched_places"],
+                        metadata: {"pictureId":"XXXX-XXXX-XXXX-XXXX"}
                     };
 
 
