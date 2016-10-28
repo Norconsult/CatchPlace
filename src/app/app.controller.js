@@ -216,11 +216,15 @@ angular.module('processApp')
                 );
             };
 
+            var _createSelectBox = function (center, radius) {
+                var centerExtent=new ol.geom.Point(center).getExtent();
+                return  new ol.extent.buffer(centerExtent,radius);
+            };
+
             var _mapMoveend = function(){
-                //console.log(map.getView().calculateExtent(map.getSize()));
-                _getPlacenames(map.getView().calculateExtent(map.getSize()));
-                // var test = _transformCoordinates(mapsrs, 'EPSG:4326', map.getView().getCenter());
-                // console.log(test);
+                var bbox=_createSelectBox(map.getView().getCenter(), 1000);
+                _getPlacenames(bbox);
+                map.un('moveend',_mapMoveend);
             };
 
             var _transformCoordinates = function(fromEpsg, toEpsg, coordinates){
@@ -318,6 +322,8 @@ angular.module('processApp')
             };
 
             function _delayedClosestPlacename(layer, center){
+                var bbox=_createSelectBox(center, 1000);
+                _getPlacenames(bbox);
                 console.log(center);
                 var source = layer.getSource();
                 var closestFeature = source.getClosestFeatureToCoordinate(center);
