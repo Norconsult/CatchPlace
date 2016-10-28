@@ -1,6 +1,6 @@
 angular.module('processApp')
     .factory('processAppFactory', [
-        function() {
+        function(){
 
 
             var userObjectId = "";
@@ -11,6 +11,20 @@ angular.module('processApp')
             var geolocationguid = 999999;
             var geolocationLayer;
             var initialGeolocationChange = false;
+
+            function _guid() {
+                function s4() {
+                    return Math.floor((1 + Math.random()) * 0x10000)
+                        .toString(16)
+                        .substring(1);
+                }
+                return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                    s4() + '-' + s4() + s4() + s4();
+            }
+
+            var pictureGuid = '';
+            var oldFileName = '';
+            var newFileName = '';
 
             return {
                 setUserObjectId: function (value) {
@@ -206,7 +220,33 @@ angular.module('processApp')
 
                     geolocation.on('change:position', _geolocationChange);
                     geolocation.on('change:accuracy', _geolocationChange);
+                },
+
+                generatePictureGuid: function () {
+                    pictureGuid = _guid();
+                },
+
+                getPictureGuid: function () {
+                    return pictureGuid;
+                },
+
+                setOldFileName: function (value) {
+                      oldFileName = value;
+                },
+
+                getOldFileName: function () {
+                    return oldFileName;
+                },
+
+                setNewFileName: function (value) {
+                    newFileName = value;
+                },
+
+                getNewFileName: function () {
+                    return newFileName;
                 }
+
+
 
             };
         }]
