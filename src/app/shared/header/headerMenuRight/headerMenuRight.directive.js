@@ -7,7 +7,8 @@ angular.module('headerMenuRight')
                 link: function(scope){
                     scope.languages = isyTranslateFactory.getAllLanguages();
                     scope.logIn = function(){
-                        processAppFactory.setAuthorizationPage();
+                        scope.showAuthorizationPage();
+                        // processAppFactory.setAuthorizationPage();
                     };
                     scope.changeLanguage = function(language) {
                         isyTranslateFactory.setCurrentLanguage(language.id);

@@ -1,1 +1,1 @@
-angular.module('headerPanel', []);
+angular.module('headerPanel', ['headerMenuLeft', 'headerMenuRight']);
