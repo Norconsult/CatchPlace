@@ -253,28 +253,28 @@ angular.module('processApp')
                         layers: 'egk',
                         version: '1.1.1',
                         format: 'image/png',
-                        url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open?',
+                        url: 'https://opencache.statkart.no/gatekeeper/gk/gk.open?',
                         visible: true
                     },
                     {
                         layers: 'topo2',
                         version: '1.1.1',
                         format: 'image/png',
-                        url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open?',
+                        url: 'https://opencache.statkart.no/gatekeeper/gk/gk.open?',
                         visible: false
                     },
                     {
                         layers: 'topo2graatone',
                         version: '1.1.1',
                         format: 'image/png',
-                        url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open?',
+                        url: 'https://opencache.statkart.no/gatekeeper/gk/gk.open?',
                         visible: true
                     },
                     {
                         layers: 'GPI13klasser_fill',
                         version: '1.1.1',
                         format: 'image/png',
-                        url: 'http://wms.skogoglandskap.no/cgi-bin/ar5gpi?',
+                        url: 'https://wms.skogoglandskap.no/cgi-bin/ar5gpi?',
                         visible: false
                     }
                 ];
@@ -314,8 +314,26 @@ angular.module('processApp')
                     console.log(e.selected);
                 });
                 processAppFactory.registerMousePositionControl(map, '');
-                processAppFactory.getGeolocation(map);
+                processAppFactory.getGeolocation(map, _selectClosestPlacename);
             };
+
+            function _delayedClosestPlacename(layer, center){
+                console.log(center);
+                var source = layer.getSource();
+                var closestFeature = source.getClosestFeatureToCoordinate(center);
+                console.log(closestFeature);
+            }
+
+            function _selectClosestPlacename(center){
+                var layer = geojsonlayer['ssr'];
+                if (layer) {
+                    _delayedClosestPlacename(layer, center);
+                } else {
+                    $timeout(function(){
+                        _selectClosestPlacename(center);
+                    }, 50);
+                }
+            }
 
             $scope.redrawMap = function(){
                 map = undefined;

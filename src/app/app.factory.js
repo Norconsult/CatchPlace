@@ -108,7 +108,7 @@ angular.module('processApp')
                     }
                 },
 
-                getGeolocation: function(map){
+                getGeolocation: function(map, callback){
                     var view = map.getView();
                     var mapProjection = view.getProjection();
                     geolocation = new ol.Geolocation({
@@ -186,12 +186,13 @@ angular.module('processApp')
                         }
                     };
                     var _geolocationChange = function(){
-                        var view = map.getView();
                         var center = geolocation.getPosition();
                         if (center === undefined){
                             return;
                         }
-                        view.setCenter(center);
+                        callback(center);
+                        //var view = map.getView();
+                        //view.setCenter(center);
                         _drawGeolocation(center, geolocation.getAccuracy());
                         // var geolocationObject = {
                         //     center: center,
