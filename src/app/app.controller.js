@@ -6,7 +6,6 @@ angular.module('processApp')
             var geojsonlayer = {};
 
             var projections = {
-                //'EPSG:4326': { defs: '+proj=longlat +datum=WGS84 +no_defs', extent: [-180, -90, 180, 90], units: 'm' },
                 'EPSG:25832': { defs: '+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', extent: [-2000000.0, 3500000.0, 3545984.0, 9045984.0], units: 'm' },
                 'EPSG:25833': { defs: '+proj=utm +zone=33 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', extent: [-2500000.0, 3500000.0, 3045984.0, 9045984.0], units: 'm' },
                 'EPSG:25835': { defs: '+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', extent: [-3500000.0, 3500000.0, 2045984.0, 9045984.0], units: 'm' },
@@ -109,15 +108,7 @@ angular.module('processApp')
                             image: new ol.style.Circle({
                                 radius: 5,
                                 fill: new ol.style.Stroke({color: [255, 0, 0, 0.5]}),
-                                stroke: new ol.style.Stroke({color: [255, 0, 0, 0.9], width: 1})
-                            })
-                        });
-                    case 'ssr':
-                        return new ol.style.Style({
-                            image: new ol.style.Circle({
-                                radius: 5,
-                                fill: new ol.style.Stroke({color: [0, 0, 255, 0.5]}),
-                                stroke: new ol.style.Stroke({color: [0, 0, 255, 0.5], width: 1})
+                                stroke: new ol.style.Stroke({color: 'red', width: 1})
                             })
                         });
                     default:
@@ -173,9 +164,6 @@ angular.module('processApp')
             var _readPlacenames = function (result, service) {
                 var jsonObject=result.data;
                 var uniqueResults={};
-                if (jsonObject[service.root] === undefined){
-                    return;
-                }
                 jsonObject[service.root].forEach(function(placename){
                     var concatinatedCoordinates=placename[service.lon].split('.')[0]+placename[service.lat].split('.')[0];
                     uniqueResults[placename[service.name]+concatinatedCoordinates]=placename;
@@ -295,7 +283,7 @@ angular.module('processApp')
                     target: 'map',
                     view: new ol.View({
                         projection: projection,
-                        center: _transformCoordinates('EPSG:25833', mapsrs, [269517, 7034234]),
+                        center: [269517, 7034234],
                         zoom: 3,
                         resolutions: mapResolutions,
                         maxResolution: newMapRes[0],
@@ -305,6 +293,14 @@ angular.module('processApp')
                     overlays: []
                 });
                 map.on('moveend', _mapMoveend);
+
+                var select = new ol.interaction.Select({
+                    condition: ol.events.condition.click
+                });
+                map.addInteraction(select);
+                select.on('select', function(e) {
+                    console.log(e.selected);
+                });
             };
 
             $scope.redrawMap = function(){
