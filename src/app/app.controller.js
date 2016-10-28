@@ -93,10 +93,10 @@ angular.module('processApp')
                     }
                 };
                 placeNameServices.forEach(function(service){
-                    var bbox=service.bbox.minx + '=' + extent[0][0] +
-                        service.bbox.miny + '=' + extent[0][0] +
-                        service.bbox.maxx + '=' + extent[0][0] +
-                        service.bbox.maxy + '=' + extent[0][0];
+                    var bbox=service.bbox.minx + '=' + extent[0] +
+                        service.bbox.miny + '=' + extent[1] +
+                        service.bbox.maxx + '=' + extent[2] +
+                        service.bbox.maxy + '=' + extent[3];
                     var url=service.url + bbox;
                     $http.get(url);
 
