@@ -79,7 +79,7 @@ angular.module('processApp')
 
             var _readGeometryFromPlacenames = function (jsonObject, service) {
                 var features = [];
-                for (var i = 0; i < jsonObject.length; i++) {
+                for (var i in jsonObject) {
                     features.push({
                         type: "Feature",
                         properties: {
@@ -103,7 +103,11 @@ angular.module('processApp')
 
             var _readPlacenames = function (result, service) {
                 var jsonObject=result.data;
-                _readGeometryFromPlacenames(jsonObject[service.root], service);
+                var uniqueResults={};
+                jsonObject[service.root].forEach(function(placename){
+                    uniqueResults[placename[service.name]]=placename;
+                });
+                _readGeometryFromPlacenames(uniqueResults, service);
             };
 
             var _getPlacenames = function (extent) {
