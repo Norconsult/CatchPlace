@@ -2,6 +2,7 @@ angular.module('processApp')
     .controller('processAppController', ['$scope','$location','$timeout','$http',
         function($scope,$location,$timeout,$http){
             var map;
+            var mapsrs = 'EPSG:25833';
 
             var projections = {
                 'EPSG:25832': { defs: '+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', extent: [-2000000.0, 3500000.0, 3545984.0, 9045984.0], units: 'm' },
@@ -104,9 +105,21 @@ angular.module('processApp')
             };
 
             var _mapMoveend = function(){
-                console.log(map.getView().calculateExtent(map.getSize()));
+                var extent = map.getView().calculateExtent(map.getSize());
+                console.log(extent);
+                getPlacenames(extent);
+                var test = _transformCoordinates(mapsrs, 'EPSG:4326', map.getView().getCenter());
+                console.log(test);
                 map.un('moveend', _mapMoveend);
-                getPlacenames(map.getView().calculateExtent(map.getSize()));
+            };
+
+            var _transformCoordinates = function(fromEpsg, toEpsg, coordinates){
+                if (fromEpsg && toEpsg && coordinates) {
+                    if (proj4.defs(fromEpsg) && proj4.defs(toEpsg)) {
+                        var transformObject = proj4(fromEpsg, toEpsg);
+                        return transformObject.forward(coordinates);
+                    }
+                }
             };
 
             $scope.initMap = function(){
@@ -118,10 +131,9 @@ angular.module('processApp')
                 $('#map').height($(document).height() - $('[header-panel]').height());
                 $('#map').width($(document).width());
 
-                var epsgcode = $location.search().srs.toUpperCase();
                 var projection = new ol.proj.Projection({
-                    code: epsgcode,
-                    extent: projections[epsgcode].extent,
+                    code: mapsrs,
+                    extent: projections[mapsrs].extent,
                     units: 'm'
                 });
                 ol.proj.addProjection(projection);
@@ -187,8 +199,9 @@ angular.module('processApp')
 
             $(document).ready(function(){
                 if ($location.search().srs === undefined){
-                    _setSearch({'srs':'EPSG:25833'});
+                    _setSearch({'srs': mapsrs});
                 }
+                mapsrs = $location.search().srs.toUpperCase();
                 $scope.initMap();
             });
         }
