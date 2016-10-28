@@ -14,6 +14,20 @@ angular.module('headerMenuRight')
                         isyTranslateFactory.setCurrentLanguage(language.id);
                         $translate.use(language.id);
                     };
+
+                    scope.loginName = function () {
+                        return processAppFactory.getUserName();
+                    };
+
+                    scope.showLoginText = function () {
+                        return processAppFactory.getUserName() === "";
+                    };
+
+                    scope.logOut = function () {
+                        processAppFactory.setUserName("");
+                        Backendless.UserService.logout();
+                    };
+
                 }
             };
         }]);

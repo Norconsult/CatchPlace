@@ -17,6 +17,7 @@ angular.module('authorizationPage')
                             user = Backendless.UserService.login( scope.username, scope.password );
                             console.log("User: ", user);
                             processAppFactory.setUserObjectId(user.objectId);
+                            processAppFactory.setUserName(user.name);
                             scope.showMainPage();
                         }
                         catch( err ) // see more on error handling

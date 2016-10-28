@@ -1,5 +1,5 @@
 <span class="dropdown">
-    <a role="button" data-toggle="dropdown" class="header-menu-icon" data-target="#" href="/page.html">
+    <a role="button" data-toggle="dropdown" class="header-menu-icon">
         <span class="glyphicon glyphicon-cog"></span>
     </a>
     <ul class="dropdown-menu dropdown-menu-header-right pull-right" role="menu" aria-labelledby="dropdownMenu">
@@ -15,7 +15,7 @@
     </ul>
 </span>
 <span class="dropdown">
-    <a role="button" data-toggle="dropdown" class="header-menu-icon" data-target="#" href="/page.html">
+    <a role="button" data-toggle="dropdown" class="header-menu-icon">
         <span class="glyphicon glyphicon-menu-hamburger"></span>
     </a>
     <ul class="dropdown-menu dropdown-menu-header-right pull-right" role="menu" aria-labelledby="dropdownMenu">
@@ -39,6 +39,20 @@
     </ul>
 </span>
 
-<span class="header-menu-icon" ng-click="logIn()" translate="login"></span>
+<span data-ng-show="showLoginText()" class="header-menu-icon" ng-click="logIn()">Sign in</span>
+
+<span data-ng-show="!showLoginText()" class="dropdown">
+    <a role="button" data-toggle="dropdown" class="header-menu-icon">
+        <span class="glyphicon glyphicon-user"></span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-header-right pull-right" role="menu" aria-labelledby="dropdownMenu">
+        <li class="dropdown-header"><p data-ng-bind="loginName()"></p></li>
+        <li data-ng-click="logOut()">
+            <a>
+                <span>Sign out</span>
+            </a>
+        </li>
+    </ul>
+</span>
 
 
