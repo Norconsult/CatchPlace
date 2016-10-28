@@ -12,6 +12,7 @@
     "es5-shim" : "*",
     "jquery": "2.2.4",
     "openlayers3": "https://github.com/openlayers/ol3/releases/download/v3.19.0/v3.19.0-dist.zip",
+    "proj4": "*",
     "backendless": "^3.1.18"
   },
   "resolutions": {

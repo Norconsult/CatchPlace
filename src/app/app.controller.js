@@ -1,7 +1,17 @@
 angular.module('processApp')
-    .controller('processAppController', ['$scope',
-        function($scope){
+    .controller('processAppController', ['$scope','$location',
+        function($scope,$location){
             var map;
+
+            var projections = {
+                'EPSG:25832': { defs: '+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', extent: [-2000000.0, 3500000.0, 3545984.0, 9045984.0], units: 'm' },
+                'EPSG:25833': { defs: '+proj=utm +zone=33 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', extent: [-2500000.0, 3500000.0, 3045984.0, 9045984.0], units: 'm' },
+                'EPSG:25835': { defs: '+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', extent: [-3500000.0, 3500000.0, 2045984.0, 9045984.0], units: 'm' },
+                'EPSG:32632': { defs: '+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', extent: [-2000000.0, 3500000.0, 3545984.0, 9045984.0], units: 'm' },
+                'EPSG:32633': { defs: '+proj=utm +zone=33 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', extent: [-2500000.0, 3500000.0, 3045984.0, 9045984.0], units: 'm' },
+                'EPSG:32635': { defs: '+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', extent: [-3500000.0, 3500000.0, 2045984.0, 9045984.0], units: 'm' },
+                'EPSG:900913': { defs: '+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs', extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34], units: 'm' }
+            };
 
             Backendless.initApp( "7DB77AF0-F276-073B-FFC2-0B2AA0A2E900", "E48F463B-8606-F4E3-FFA9-A8756155BC00", "v1" );
 
@@ -15,6 +25,24 @@ angular.module('processApp')
 
             $scope.layout = "mainPage";
 
+            var _loadCustomProj = function(){
+                for (var srs in projections){
+                    var projection = projections[srs];
+                    proj4.defs(srs, projection.defs);
+                    ol.proj.addProjection(new ol.proj.Projection({
+                        code: srs,
+                        units: projection.units
+                    }));
+                }
+            };
+
+            var _setSearch = function (obj) {
+                if (!angular.equals(obj, $location.search())) {
+                    var newSearch = angular.extend($location.search(), obj);
+                    $location.search(newSearch);
+                }
+            };
+
             var _createLayer = function(config){
                 return new ol.layer.Tile({
                     source: new ol.source.TileWMS({
@@ -26,7 +54,8 @@ angular.module('processApp')
                         url: config.url,
                         crossOrigin: null,
                         transparent: true
-                    })
+                    }),
+                    visible: config.visible
                 });
             };
 
@@ -39,23 +68,15 @@ angular.module('processApp')
             };
 
             $scope.initMap = function(){
-                // Set with and height
+
+
+                _loadCustomProj();
+
+                // Set width and height
                 $('#map').height($(document).height() - $('[header-panel]').height());
                 $('#map').width($(document).width());
 
-                var projections = {
-                    'EPSG:25832': { extent: [-2000000.0, 3500000.0, 3545984.0, 9045984.0] },
-                    'EPSG:32632': { extent: [-2000000.0, 3500000.0, 3545984.0, 9045984.0] },
-                    'EPSG:25833': { extent: [-2500000.0, 3500000.0, 3045984.0, 9045984.0] },
-                    'EPSG:32633': { extent: [-2500000.0, 3500000.0, 3045984.0, 9045984.0] },
-                    'EPSG:25835': { extent: [-3500000.0, 3500000.0, 2045984.0, 9045984.0] },
-                    'EPSG:32635': { extent: [-3500000.0, 3500000.0, 2045984.0, 9045984.0] },
-                    'EPSG:4326': { extent: [-180, -90, 180, 90] },
-                    'EPSG:900913': { extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34] }
-                };
-
-                var epsgcode = 'EPSG:25833';
-
+                var epsgcode = $location.search().srs.toUpperCase();
                 var projection = new ol.proj.Projection({
                     code: epsgcode,
                     extent: projections[epsgcode].extent,
@@ -66,16 +87,31 @@ angular.module('processApp')
                 var maplayers = [
                     {
                         layers: 'egk',
-                        //layers: 'topo2',
                         version: '1.1.1',
                         format: 'image/png',
-                        url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open?'
+                        url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open?',
+                        visible: true
+                    },
+                    {
+                        layers: 'topo2',
+                        version: '1.1.1',
+                        format: 'image/png',
+                        url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open?',
+                        visible: false
+                    },
+                    {
+                        layers: 'topo2graatone',
+                        version: '1.1.1',
+                        format: 'image/png',
+                        url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open?',
+                        visible: true
                     },
                     {
                         layers: 'GPI13klasser_fill',
                         version: '1.1.1',
                         format: 'image/png',
-                        url: 'http://wms.skogoglandskap.no/cgi-bin/ar5gpi?'
+                        url: 'http://wms.skogoglandskap.no/cgi-bin/ar5gpi?',
+                        visible: false
                     }
                 ];
 
@@ -95,8 +131,8 @@ angular.module('processApp')
                     target: 'map',
                     view: new ol.View({
                         projection: projection,
-                        center: [569517, 7034234],
-                        zoom: 5,
+                        center: [269517, 7034234],
+                        zoom: 3,
                         resolutions: mapResolutions,
                         maxResolution: newMapRes[0],
                         numZoomLevels: numZoomLevels
@@ -106,30 +142,11 @@ angular.module('processApp')
                 });
             };
 
-            $scope.initDemo = function(){
-                var layers = [
-                    new ol.layer.Tile({
-                        source: new ol.source.OSM()
-                    }),
-                    new ol.layer.Tile({
-                        extent: [-13884991, 2870341, -7455066, 6338219],
-                        source: new ol.source.TileWMS({
-                            url: 'https://ahocevar.com/geoserver/wms',
-                            params: {'LAYERS': 'topp:states', 'TILED': true},
-                            serverType: 'geoserver'
-                        })
-                    })
-                ];
-                map = new ol.Map({
-                    layers: layers,
-                    target: 'map',
-                    view: new ol.View({
-                        center: [-10997148, 4569099],
-                        zoom: 4
-                    })
-                });
-            };
-            $(document).ready($scope.initMap);
-            //$scope.initDemo();
+            $(document).ready(function(){
+                if ($location.search().srs === undefined){
+                    _setSearch({'srs':'EPSG:25833'});
+                }
+                $scope.initMap();
+            });
         }
     ]);
