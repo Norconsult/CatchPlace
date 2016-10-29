@@ -146,9 +146,9 @@ angular.module('processApp')
                     }
                     initialGeolocationChange = true;
 
-                    var _drawGeolocation = function(center, radius){
+                    var _drawGeolocation = function(center, radius, heading){
                         position = center;
-                        if (geolocationLayer !== null){
+                        if (geolocationLayer !== null) {
                             var geolocationSource = geolocationLayer.getSource();
                             geolocationSource.clear();
                             var geolocationStyle = new ol.style.Style({
@@ -176,14 +176,17 @@ angular.module('processApp')
                             });
                             geolocationFeature.setStyle(geolocationStyle);
                             geolocationSource.addFeature(geolocationFeature);
-                            if (initialGeolocationChange){
+                            if (initialGeolocationChange) {
                                 initialGeolocationChange = false;
                                 var geolocextent = geolocationFeature.getGeometry().getExtent();
-                                geolocextent[0] -= 5*radius;
-                                geolocextent[1] -= 5*radius;
-                                geolocextent[2] += 5*radius;
-                                geolocextent[3] += 5*radius;
+                                geolocextent[0] -= 5 * radius;
+                                geolocextent[1] -= 5 * radius;
+                                geolocextent[2] += 5 * radius;
+                                geolocextent[3] += 5 * radius;
                                 //map.getView().fit(geolocextent, map.getSize());
+                            }
+                            if (heading) {
+                                map.getView().setRotation(heading);
                             }
                         }
                     };
@@ -195,7 +198,8 @@ angular.module('processApp')
                         callback(center);
                         //var view = map.getView();
                         //view.setCenter(center);
-                        _drawGeolocation(center, geolocation.getAccuracy());
+                        //console.log(geolocation.getHeading());
+                        _drawGeolocation(center, geolocation.getAccuracy(), geolocation.getHeading());
                         // var geolocationObject = {
                         //     center: center,
                         //     accuracy: Math.round(geolocation.getAccuracy()*10)/10,
