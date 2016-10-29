@@ -2,6 +2,7 @@ angular.module('processApp')
     .controller('processAppController', ['$scope','$location','$timeout','$http','processAppFactory',
         function($scope,$location,$timeout,$http,processAppFactory){
             var map;
+            var oldCenter;
             var mapsrs = 'EPSG:25833';
             var geojsonlayer = {};
 
@@ -305,6 +306,7 @@ angular.module('processApp')
                     target: 'map',
                     view: new ol.View({
                         projection: projection,
+                        enableRotation: false,
                         center: $scope._transformCoordinates('EPSG:25833', mapsrs, [236304, 6676890]),
                         zoom: 10,
                         resolutions: mapResolutions,
@@ -315,13 +317,6 @@ angular.module('processApp')
                     overlays: []
                 });
 
-                var select = new ol.interaction.Select({
-                    condition: ol.events.condition.click
-                });
-                map.addInteraction(select);
-                select.on('select', function(e) {
-                    console.log(e.selected);
-                });
                 processAppFactory.registerMousePositionControl(map, '');
                 processAppFactory.getGeolocation(map, _selectClosestPlacename);
             };
@@ -338,7 +333,26 @@ angular.module('processApp')
                 _getPlacenames(bbox);
             }
 
+            function _checkForMovement(center, tolerance){
+                if(!oldCenter){
+                    oldCenter=center;
+                    return true;
+                }
+                var oldCenterGeog=ol.proj.transform(oldCenter,mapsrs,'EPSG:4326');
+                var centerGeog=ol.proj.transform(center,mapsrs,'EPSG:4326');
+                var distance = ol.sphere.WGS84.haversineDistance(oldCenterGeog,centerGeog);
+
+                if(distance>tolerance){
+                    oldCenter=center;
+                    return true;
+                }
+                return false;
+            }
+
             function _selectClosestPlacename(center){
+                if(!_checkForMovement(center, 100)){
+                    return;
+                }
                 _getPlacenamesByBbox(center);
                 var layer = geojsonlayer['ssr'];
                 if (layer) {
