@@ -1,6 +1,6 @@
 angular.module('processApp')
-    .controller('processAppController', ['$scope','$location','$timeout','$http','processAppFactory',
-        function($scope,$location,$timeout,$http,processAppFactory){
+    .controller('processAppController', ['$scope','$window','$location','$timeout','$http','processAppFactory',
+        function($scope,$window,$location,$timeout,$http,processAppFactory){
             var map;
             var oldCenter;
             var mapsrs = 'EPSG:25833';
@@ -34,6 +34,10 @@ angular.module('processApp')
 
             $scope.showCreateAccoutPage = function () {
                 $scope.layout = "createAccountPage";
+            };
+
+            $scope.showTopscorePage = function () {
+                $scope.layout = "topscorePage";
             };
 
             $scope.layout = "mainPage";
@@ -110,7 +114,7 @@ angular.module('processApp')
                             image: new ol.style.Circle({
                                 radius: 5,
                                 fill: new ol.style.Stroke({color: [255, 0, 0, 0.5]}),
-                                stroke: new ol.style.Stroke({color: [255, 0, 0, 0.9], width: 1})
+                                stroke: new ol.style.Stroke({color: [255, 255, 255, 0.9], width: 2})
                             })
                         });
                     case 'ssr':
@@ -118,7 +122,7 @@ angular.module('processApp')
                             image: new ol.style.Circle({
                                 radius: 5,
                                 fill: new ol.style.Stroke({color: [0, 0, 255, 0.5]}),
-                                stroke: new ol.style.Stroke({color: [0, 0, 255, 0.5], width: 1})
+                                stroke: new ol.style.Stroke({color: [255, 255, 255, 0.9], width: 2})
                             })
                         });
                     default:
@@ -234,14 +238,20 @@ angular.module('processApp')
                 }
             };
 
-            $scope.initMap = function(){
-
-
-                _loadCustomProj();
-
+            $scope.setMapHeight = function(){
                 // Set width and height
                 $('#map').height($(document).height() - $('[header-panel]').height());
                 $('#map').width($(document).width());
+                if (map) {
+                    map.updateSize();
+                }
+            };
+
+            $scope.initMap = function(){
+
+                _loadCustomProj();
+
+                $scope.setMapHeight();
 
                 var projection = new ol.proj.Projection({
                     code: mapsrs,
@@ -306,7 +316,6 @@ angular.module('processApp')
                     target: 'map',
                     view: new ol.View({
                         projection: projection,
-                        enableRotation: false,
                         center: $scope._transformCoordinates('EPSG:25833', mapsrs, [236304, 6676890]),
                         zoom: 10,
                         resolutions: mapResolutions,
@@ -317,6 +326,13 @@ angular.module('processApp')
                     overlays: []
                 });
 
+                var select = new ol.interaction.Select({
+                    condition: ol.events.condition.click
+                });
+                map.addInteraction(select);
+                select.on('select', function(e) {
+                    console.log(e.selected);
+                });
                 processAppFactory.registerMousePositionControl(map, '');
                 processAppFactory.getGeolocation(map, _selectClosestPlacename);
             };
@@ -350,10 +366,9 @@ angular.module('processApp')
             }
 
             function _selectClosestPlacename(center){
-                if(!_checkForMovement(center, 100)){
-                    return;
+                if(_checkForMovement(center, 100) || !oldCenter){
+                    _getPlacenamesByBbox(center);
                 }
-                _getPlacenamesByBbox(center);
                 var layer = geojsonlayer['ssr'];
                 if (layer) {
                     _delayedClosestPlacename(layer, center);
@@ -365,6 +380,7 @@ angular.module('processApp')
             }
 
             $scope.redrawMap = function(){
+                processAppFactory.resetGeolocation(map);
                 map = undefined;
                 geojsonlayer = {};
                 $scope.initMap();
@@ -376,6 +392,9 @@ angular.module('processApp')
                 }
                 mapsrs = $location.search().srs.toUpperCase();
                 $scope.initMap();
+            });
+            $($window).resize(function(){
+                $timeout($scope.setMapHeight,10);
             });
         }
     ]);

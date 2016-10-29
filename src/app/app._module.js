@@ -7,5 +7,6 @@ angular.module('processApp', [
     'headerMenuRight',
     'authorizationPage',
     'createAccountPage',
-    'processPage'
+    'processPage',
+    'topscorePage'
 ]);
