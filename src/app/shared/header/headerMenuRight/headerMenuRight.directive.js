@@ -78,7 +78,7 @@ angular.module('headerMenuRight')
 
                         var geoQuery =
                         {
-                            metadata: {ownerId: processAppFactory.getUserObjectId()},
+                            //metadata: {ownerId: processAppFactory.getUserObjectId()},
                             categories: ["catched_places"],
                             includeMetadata:true
                         };
