@@ -16,8 +16,8 @@ angular.module('processApp')
                 'EPSG:32635': { defs: '+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', extent: [-3500000.0, 3500000.0, 2045984.0, 9045984.0], units: 'm' },
                 'EPSG:900913': { defs: '+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs', extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34], units: 'm' }
             };
-
-            Backendless.initApp( "7DB77AF0-F276-073B-FFC2-0B2AA0A2E900", "E48F463B-8606-F4E3-FFA9-A8756155BC00", "v1" );
+            var bkglesskey = { appid: "7DB77AF0-F276-073B-FFC2-0B2AA0A2E900", jskey: "E48F463B-8606-F4E3-FFA9-A8756155BC00", version: "v1"};
+            Backendless.initApp( bkglesskey.appid, bkglesskey.jskey, bkglesskey.version );
 
             $scope.showMainPage = function(){
                 $scope.layout = "mainPage";
@@ -91,7 +91,8 @@ angular.module('processApp')
                         features.push({
                             type: 'Feature',
                             properties: {
-                                id: points[i].objectId
+                                id: points[i].objectId,
+                                pictureGuid: points[i].metadata.pictureGuid
                             },
                             geometry: {
                                 type: 'Point',
@@ -331,7 +332,15 @@ angular.module('processApp')
                 });
                 map.addInteraction(select);
                 select.on('select', function(e) {
-                    console.log(e.selected);
+                    if (e.selected && Array.isArray(e.selected) && e.selected.length > 0){
+                        var url = 'https://api.backendless.com/';
+                        url += bkglesskey.appid;
+                        url += '/';
+                        url += bkglesskey.version;
+                        url += '/files/my-folder/';
+                        url += e.selected[0].getProperties().pictureGuid;
+                        console.log(url);
+                    }
                 });
                 processAppFactory.registerMousePositionControl(map, '');
                 processAppFactory.getGeolocation(map, _selectClosestPlacename);
@@ -384,6 +393,7 @@ angular.module('processApp')
                 map = undefined;
                 geojsonlayer = {};
                 $scope.initMap();
+                //$timeout($scope.setMapHeight,10);
             };
 
             $(document).ready(function(){
