@@ -205,6 +205,10 @@ button:focus{
   color: $color-primary;
 }
 
+.no-display{
+  display: none !important;
+}
+
 .login-icon:hover{
   color: black;
 }
