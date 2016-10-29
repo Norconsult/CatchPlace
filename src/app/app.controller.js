@@ -108,16 +108,37 @@ angular.module('processApp')
                 }
             };
 
+            // var _getImageStyle = function(a, b){
+            var _getImageStyle = function(feature, resolution){
+                if (feature) {
+                    if (resolution > 40){
+                        return undefined;
+                    }
+                    // console.log(feature);
+                    var iconStyle = new ol.style.Style({
+                        image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+                            anchor: [0.5, 46],
+                            anchorXUnits: 'fraction',
+                            anchorYUnits: 'pixels',
+                            //size: [25, 25],
+                            src: 'https://openlayers.org/en/v3.19.1/examples/data/icon.png'//_createIconUrl(feature)
+                        }))
+                    });
+                    return iconStyle;
+                    // return new ol.style.Style({
+                    //     image: new ol.style.Circle({
+                    //         radius: 5,
+                    //         fill: new ol.style.Stroke({color: [255, 0, 0, 0.5]}),
+                    //         stroke: new ol.style.Stroke({color: [255, 255, 255, 0.9], width: 2})
+                    //     })
+                    // });
+                }
+            };
+
             var _getLayerStyle = function(layername) {
                 switch (layername.toLowerCase()){
                     case 'backendless':
-                        return new ol.style.Style({
-                            image: new ol.style.Circle({
-                                radius: 5,
-                                fill: new ol.style.Stroke({color: [255, 0, 0, 0.5]}),
-                                stroke: new ol.style.Stroke({color: [255, 255, 255, 0.9], width: 2})
-                            })
-                        });
+                        return _getImageStyle;
                     case 'ssr':
                         return new ol.style.Style({
                             image: new ol.style.Circle({
@@ -334,18 +355,23 @@ angular.module('processApp')
                 map.addInteraction(select);
                 select.on('select', function(e) {
                     if (e.selected && Array.isArray(e.selected) && e.selected.length > 0){
-                        var url = 'https://api.backendless.com/';
-                        url += bkglesskey.appid;
-                        url += '/';
-                        url += bkglesskey.version;
-                        url += '/files/my-folder/';
-                        url += e.selected[0].getProperties().pictureGuid;
+                        var url = _createIconUrl(e.selected[0]);
                         console.log(url);
                     }
                 });
                 processAppFactory.registerMousePositionControl(map, '');
                 processAppFactory.getGeolocation(map, _selectClosestPlacename);
             };
+
+            function _createIconUrl(feature){
+                var url = 'https://api.backendless.com/';
+                url += bkglesskey.appid;
+                url += '/';
+                url += bkglesskey.version;
+                url += '/files/my-folder/';
+                url += feature.getProperties().pictureGuid;
+                return url;
+            }
 
             function _delayedClosestPlacename(layer, center){
                 _getPlacenamesByBbox(center);
