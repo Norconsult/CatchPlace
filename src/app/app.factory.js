@@ -120,6 +120,13 @@ angular.module('processApp')
                             target: element
                         });
                         map.addControl(mousePositionControl);
+
+                        // var deviceOrientation = new ol.DeviceOrientation();
+                        // deviceOrientation.on('change', function() {
+                        //     var view = map.getView();
+                        //     var gamma = deviceOrientation.getGamma() || 0;
+                        //     view.setRotation(gamma);
+                        // });
                     }
                 },
 
@@ -146,7 +153,7 @@ angular.module('processApp')
                     }
                     initialGeolocationChange = true;
 
-                    var _drawGeolocation = function(center, radius, heading){
+                    var _drawGeolocation = function(center, radius){
                         position = center;
                         if (geolocationLayer !== null) {
                             var geolocationSource = geolocationLayer.getSource();
@@ -185,9 +192,6 @@ angular.module('processApp')
                                 geolocextent[3] += 5 * radius;
                                 //map.getView().fit(geolocextent, map.getSize());
                             }
-                            if (heading) {
-                                map.getView().setRotation(heading);
-                            }
                         }
                     };
                     var _geolocationChange = function(){
@@ -199,7 +203,7 @@ angular.module('processApp')
                         //var view = map.getView();
                         //view.setCenter(center);
                         //console.log(geolocation.getHeading());
-                        _drawGeolocation(center, geolocation.getAccuracy(), geolocation.getHeading());
+                        _drawGeolocation(center, geolocation.getAccuracy());
                         // var geolocationObject = {
                         //     center: center,
                         //     accuracy: Math.round(geolocation.getAccuracy()*10)/10,
