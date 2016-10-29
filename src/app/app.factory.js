@@ -166,11 +166,11 @@ angular.module('processApp')
                                         width: 2
                                     }),
                                     fill: new ol.style.Fill({
-                                        color: 'rgba(32,170,172,0.8)'
+                                        color: 'rgba(85,181,230,0.8)'
                                     })
                                 }),
                                 fill: new ol.style.Fill({
-                                    color: 'rgba(0,102,204,0.15)'
+                                    color: 'rgba(85,181,230,0.15)'
                                 }),
                                 zIndex: geolocationguid
                             });
@@ -190,7 +190,9 @@ angular.module('processApp')
                                 geolocextent[1] -= 5 * radius;
                                 geolocextent[2] += 5 * radius;
                                 geolocextent[3] += 5 * radius;
-                                //map.getView().fit(geolocextent, map.getSize());
+                                map.getView().fit(geolocextent, map.getSize());
+                            } else {
+                                map.getView().setCenter(center);
                             }
                         }
                     };
