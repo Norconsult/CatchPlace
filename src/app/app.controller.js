@@ -36,6 +36,10 @@ angular.module('processApp')
                 $scope.layout = "createAccountPage";
             };
 
+            $scope.showTopscorePage = function () {
+                $scope.layout = "topscorePage";
+            };
+
             $scope.layout = "mainPage";
 
             var _loadCustomProj = function(){
