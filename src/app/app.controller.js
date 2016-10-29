@@ -304,6 +304,7 @@ angular.module('processApp')
                     view: new ol.View({
                         projection: projection,
                         center: _transformCoordinates('EPSG:25833', mapsrs, [236304, 6676890]),
+                        enableRotation: false,
                         zoom: 10,
                         resolutions: mapResolutions,
                         maxResolution: newMapRes[0],
