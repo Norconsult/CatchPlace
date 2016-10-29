@@ -3,6 +3,10 @@ CatchPlace - #hack4no
 
 https://geoinnsyn.nois.no/CatchPlace
 
+Presentation:
+https://geoinnsyn.nois.no/CatchPlaceDocs/CatchPlace.pdf
+
+
 
 Contributing
 ------------
