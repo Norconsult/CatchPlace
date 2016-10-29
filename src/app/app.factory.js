@@ -159,7 +159,7 @@ angular.module('processApp')
 
                     var _drawGeolocation = function(center, radius){
                         position = center;
-                        var geolocationLayer = _refreshGeolocationLayer();
+                        geolocationLayer = _refreshGeolocationLayer();
                         if (geolocationLayer !== null){
                             var geolocationSource = geolocationLayer.getSource();
                             geolocationSource.clear();

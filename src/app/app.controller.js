@@ -6,7 +6,7 @@ angular.module('processApp')
             var geojsonlayer = {};
 
             var projections = {
-                //'EPSG:4326': { defs: '+proj=longlat +datum=WGS84 +no_defs', extent: [-180, -90, 180, 90], units: 'm' },
+                'EPSG:4326': { defs: '+proj=longlat +datum=WGS84 +no_defs', extent: [-180, -90, 180, 90], units: 'degrees' },
                 'EPSG:25832': { defs: '+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', extent: [-2000000.0, 3500000.0, 3545984.0, 9045984.0], units: 'm' },
                 'EPSG:25833': { defs: '+proj=utm +zone=33 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', extent: [-2500000.0, 3500000.0, 3045984.0, 9045984.0], units: 'm' },
                 'EPSG:25835': { defs: '+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', extent: [-3500000.0, 3500000.0, 2045984.0, 9045984.0], units: 'm' },
@@ -277,9 +277,18 @@ angular.module('processApp')
                     }
                 ];
 
+                var maxRes = 21664.0;
+                if (mapsrs == "EPSG:900913") {
+                    maxRes = 156543.0339;
+                } else if (mapsrs == "EPSG:4326") {
+                    maxRes = 0.703125;
+                } else if (mapsrs == "EPSG:54009") {
+                    maxRes = 70312.5;
+                }
+
                 var numZoomLevels = 18;
                 var newMapRes = [];
-                newMapRes[0]= 21664;
+                newMapRes[0]= maxRes;
                 //var mapScales = [];
                 //mapScales[0] = mapConfig.newMaxScale;
                 for (var t = 1; t < numZoomLevels; t++) {
