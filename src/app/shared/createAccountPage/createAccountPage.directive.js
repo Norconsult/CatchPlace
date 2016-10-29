@@ -1,6 +1,6 @@
 angular.module('createAccountPage')
-    .directive('createAccountPage', [
-        function() {
+    .directive('createAccountPage', ['processAppFactory','$timeout',
+        function(processAppFactory,$timeout) {
             return {
                 templateUrl: 'shared/createAccountPage/createAccountPage.html',
                 restrict: 'A',
@@ -9,6 +9,14 @@ angular.module('createAccountPage')
                     function userRegistered(  )
                     {
                         console.log( "user has been registered"  );
+                        var user = Backendless.UserService.login( scope.email, scope.password );
+                        console.log("User: ", user);
+                        processAppFactory.setUserObjectId(user.objectId);
+                        processAppFactory.setUserName(user.name);
+                        $timeout(function(){
+                            scope.showMainPage();
+                        },50);
+
                     }
 
                     function gotError( err ) // see more on error handling
@@ -20,7 +28,6 @@ angular.module('createAccountPage')
                     scope.registerUser = function () {
                         console.log("Register new user");
                         var user = new Backendless.User();
-                        // user.name = scope.username;
                         user.password = scope.password;
                         user.email=scope.email;
 
