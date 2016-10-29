@@ -174,17 +174,18 @@ button:focus{
 
 .btn{
   padding: 4px 12px;
-  background-color: #20aaac;
+  background-color: #55b5e6;
 }
 
 .btn-default {
-  background-color: $color-primary;
+  background-color: #55b5e6;
   color: white;
   height: 30px;
+  border-color: transparent;
 }
 
 .btn-default:hover{
-  background-color: #229597;
+  background-color: #55b5e6;
   color: white;
 }
 
@@ -202,7 +203,7 @@ button:focus{
 }
 
 .login-icon{
-  color: $color-primary;
+  color: #55b5e6;
 }
 
 .no-display{
@@ -228,7 +229,7 @@ button:focus{
   width: 400px;
   margin-left: auto;
   margin-right: auto;
-  border: 1px solid $gray;
+  border: 1px solid black;
   margin-top: 25px;
   background-color: white;
   border-radius: 4px;
@@ -270,7 +271,7 @@ button:focus{
   .clean-btn{
     width: 780px;
   }
-
+  text-align: center;
   box-sizing: border-box;
   clear: both;
   padding:4px;
@@ -352,6 +353,11 @@ button:focus{
 
 }
 
+.account-btn{
+  color: #0984c3
+}
+
+
 .login-input{
   height: 30px;
   padding-left: 5px;
@@ -401,7 +407,7 @@ html{
   position: absolute;
   width: 100%;
   top: 0;
-  background-color: #20aaac;
+  background-color: #0984c3;
   color: #e7e7dd;
   padding: 6px;
 }
