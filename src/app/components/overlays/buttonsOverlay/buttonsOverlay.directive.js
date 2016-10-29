@@ -6,38 +6,38 @@ angular.module('buttonsOverlay')
                 restrict: 'A',
                 link: function(scope){
 
-                    function _guid() {
-                        function s4() {
-                            return Math.floor((1 + Math.random()) * 0x10000)
-                                .toString(16)
-                                .substring(1);
-                        }
-                        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-                            s4() + '-' + s4() + s4() + s4();
-                    }
-                    
+                    // function _guid() {
+                    //     function s4() {
+                    //         return Math.floor((1 + Math.random()) * 0x10000)
+                    //             .toString(16)
+                    //             .substring(1);
+                    //     }
+                    //     return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                    //         s4() + '-' + s4() + s4() + s4();
+                    // }
+                    //
 
-                    scope.addPoint =    function (coor) {
-                        var callback = new Backendless.Async(
-                            function( result )
-                            {
-                                alert( "geo point saved " + result.geopoint.objectId );
-                            },
-                            function(result)
-                            {
-                                alert( "error - " + result.message );
-                            });
-
-
-                        var point = {
-                            latitude: coor[1],
-                            longitude: coor[0],
-                            categories: ["catched_places"],
-                            metadata: {ownerId:processAppFactory.getUserObjectId(), pointGuid: _guid(), pictureGuid: processAppFactory.getPictureGuid()}
-                        };
-
-                        Backendless.Geo.addPoint( point, callback );
-                    };
+                    // scope.addPoint =    function (coor) {
+                    //     var callback = new Backendless.Async(
+                    //         function( result )
+                    //         {
+                    //             alert( "geo point saved " + result.geopoint.objectId );
+                    //         },
+                    //         function(result)
+                    //         {
+                    //             alert( "error - " + result.message );
+                    //         });
+                    //
+                    //
+                    //     var point = {
+                    //         latitude: coor[1],
+                    //         longitude: coor[0],
+                    //         categories: ["catched_places"],
+                    //         metadata: {ownerId:processAppFactory.getUserObjectId(), pointGuid: _guid(), pictureGuid: processAppFactory.getPictureGuid()}
+                    //     };
+                    //
+                    //     Backendless.Geo.addPoint( point, callback );
+                    // };
 
                     scope.getPoints = function () {
                         var callback = new Backendless.Async(
