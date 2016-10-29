@@ -2,6 +2,7 @@ angular.module('processApp')
     .controller('processAppController', ['$scope','$location','$timeout','$http','processAppFactory',
         function($scope,$location,$timeout,$http,processAppFactory){
             var map;
+            var oldCenter;
             var mapsrs = 'EPSG:25833';
             var geojsonlayer = {};
 
@@ -326,7 +327,26 @@ angular.module('processApp')
                 _getPlacenames(bbox);
             }
 
+            function _checkForMovement(center, tolerance){
+                if(!oldCenter){
+                    oldCenter=center;
+                    return true;
+                }
+                var oldCenterGeog=ol.proj.transform(oldCenter,mapsrs,'EPSG:4326');
+                var centerGeog=ol.proj.transform(center,mapsrs,'EPSG:4326');
+                var distance = ol.sphere.WGS84.haversineDistance(oldCenterGeog,centerGeog);
+
+                if(distance>tolerance){
+                    oldCenter=center;
+                    return true;
+                }
+                return false;
+            }
+
             function _selectClosestPlacename(center){
+                if(!_checkForMovement(center, 100)){
+                    return;
+                }
                 _getPlacenamesByBbox(center);
                 var layer = geojsonlayer['ssr'];
                 if (layer) {
