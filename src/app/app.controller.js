@@ -316,6 +316,7 @@ angular.module('processApp')
                     loadTilesWhileAnimating: true,
                     target: 'map',
                     view: new ol.View({
+                        enableRotation: false,
                         projection: projection,
                         center: $scope._transformCoordinates('EPSG:25833', mapsrs, [236304, 6676890]),
                         zoom: 10,
