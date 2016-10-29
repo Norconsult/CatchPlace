@@ -110,7 +110,7 @@ angular.module('processApp')
                             image: new ol.style.Circle({
                                 radius: 5,
                                 fill: new ol.style.Stroke({color: [255, 0, 0, 0.5]}),
-                                stroke: new ol.style.Stroke({color: [255, 0, 0, 0.9], width: 1})
+                                stroke: new ol.style.Stroke({color: [255, 255, 255, 0.9], width: 2})
                             })
                         });
                     case 'ssr':
@@ -118,7 +118,7 @@ angular.module('processApp')
                             image: new ol.style.Circle({
                                 radius: 5,
                                 fill: new ol.style.Stroke({color: [0, 0, 255, 0.5]}),
-                                stroke: new ol.style.Stroke({color: [0, 0, 255, 0.5], width: 1})
+                                stroke: new ol.style.Stroke({color: [255, 255, 255, 0.9], width: 2})
                             })
                         });
                     default:
@@ -235,7 +235,6 @@ angular.module('processApp')
             };
 
             $scope.initMap = function(){
-
 
                 _loadCustomProj();
 
@@ -370,6 +369,7 @@ angular.module('processApp')
             }
 
             $scope.redrawMap = function(){
+                processAppFactory.resetGeolocation(map);
                 map = undefined;
                 geojsonlayer = {};
                 $scope.initMap();
