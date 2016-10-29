@@ -17,7 +17,7 @@ angular.module('buttonsOverlay')
                     }
                     
 
-                    scope.addPoint =    function () {
+                    scope.addPoint =    function (coor) {
                         var callback = new Backendless.Async(
                             function( result )
                             {
@@ -30,10 +30,10 @@ angular.module('buttonsOverlay')
 
 
                         var point = {
-                            latitude: 66,
-                            longitude: 14,
+                            latitude: coor[1],
+                            longitude: coor[0],
                             categories: ["catched_places"],
-                            metadata: {ownerId:processAppFactory.getUserObjectId(), pointGuid: _guid(), pictureGuid: "123"}
+                            metadata: {ownerId:processAppFactory.getUserObjectId(), pointGuid: _guid(), pictureGuid: processAppFactory.getPictureGuid()}
                         };
 
                         Backendless.Geo.addPoint( point, callback );
@@ -54,7 +54,8 @@ angular.module('buttonsOverlay')
                         var geoQuery =
                         {
                             metadata: {ownerId: processAppFactory.getUserObjectId()},
-                            categories: ["catched_places"]
+                            categories: ["catched_places"],
+                            includeMetadata:true
                         };
                         //console.log("ownerId: ", processAppFactory.getUserObjectId());
                         Backendless.Geo.find( geoQuery, callback );
@@ -66,6 +67,12 @@ angular.module('buttonsOverlay')
                     {
                         files = evt.target.files; // FileList object
                     }
+
+                    // scope.getMyLocation = function () {
+                    //
+                    //     var coor = scope._transformCoordinates(undefined, "EPSG:4326", processAppFactory.getMyLocation());
+                    //     console.log("Coor: ", coor);
+                    // };
 
                     scope.uploadFileFunc = function () {
 
@@ -99,7 +106,9 @@ angular.module('buttonsOverlay')
 
                         $timeout(function() {
                             Backendless.Files.renameFile( "/my-folder/"+processAppFactory.getOldFileName(), processAppFactory.getNewFileName() );
-                        },2000);
+                            var coor = scope._transformCoordinates(undefined, "EPSG:4326", processAppFactory.getMyLocation());
+                            scope.addPoint(coor);
+                        },4000);
 
                     };
 

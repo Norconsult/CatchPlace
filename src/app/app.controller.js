@@ -91,7 +91,7 @@ angular.module('processApp')
                             },
                             geometry: {
                                 type: 'Point',
-                                coordinates: _transformCoordinates('EPSG:4326', mapsrs, [points[i].longitude, points[i].latitude])
+                                coordinates: $scope._transformCoordinates('EPSG:4326', mapsrs, [points[i].longitude, points[i].latitude])
                             }
                         });
                     }
@@ -222,7 +222,10 @@ angular.module('processApp')
                 return  new ol.extent.buffer(centerExtent,radius);
             };
 
-            var _transformCoordinates = function(fromEpsg, toEpsg, coordinates){
+            $scope._transformCoordinates = function(fromEpsg, toEpsg, coordinates){
+                if (fromEpsg === undefined){
+                    fromEpsg = mapsrs;
+                }
                 if (fromEpsg && toEpsg && coordinates) {
                     if (proj4.defs(fromEpsg) && proj4.defs(toEpsg)) {
                         var transformObject = proj4(fromEpsg, toEpsg);
@@ -303,7 +306,7 @@ angular.module('processApp')
                     target: 'map',
                     view: new ol.View({
                         projection: projection,
-                        center: _transformCoordinates('EPSG:25833', mapsrs, [236304, 6676890]),
+                        center: $scope._transformCoordinates('EPSG:25833', mapsrs, [236304, 6676890]),
                         zoom: 10,
                         resolutions: mapResolutions,
                         maxResolution: newMapRes[0],
