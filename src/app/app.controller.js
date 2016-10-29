@@ -353,10 +353,9 @@ angular.module('processApp')
             }
 
             function _selectClosestPlacename(center){
-                if(!_checkForMovement(center, 100)){
-                    return;
+                if(_checkForMovement(center, 100) || !oldCenter){
+                    _getPlacenamesByBbox(center);
                 }
-                _getPlacenamesByBbox(center);
                 var layer = geojsonlayer['ssr'];
                 if (layer) {
                     _delayedClosestPlacename(layer, center);
