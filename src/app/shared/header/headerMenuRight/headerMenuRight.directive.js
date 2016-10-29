@@ -46,7 +46,7 @@ angular.module('headerMenuRight')
                         var callback = new Backendless.Async(
                             function( result )
                             {
-                                console.log( "geo point saved " + result.geopoint.objectId );
+                                alert( "geo point saved " + result.geopoint.objectId );
                             },
                             function(result)
                             {
