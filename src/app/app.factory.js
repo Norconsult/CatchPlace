@@ -136,31 +136,18 @@ angular.module('processApp')
                         }
                     });
 
-                    geolocationLayer = new ol.layer.Vector({
-                        source: new ol.source.Vector(),
-                        projection: map.getView().getProjection()
-                    });
-                    geolocationLayer.guid = geolocationguid;
-                    map.addLayer(geolocationLayer);
-
-                    initialGeolocationChange = true;
-
-                    var _refreshGeolocationLayer = function() {
-                        if (geolocationLayer !== null){
-                            map.removeLayer(geolocationLayer);
-                        }
+                    if (geolocationLayer === undefined) {
                         geolocationLayer = new ol.layer.Vector({
                             source: new ol.source.Vector(),
                             projection: map.getView().getProjection()
                         });
                         geolocationLayer.guid = geolocationguid;
                         map.addLayer(geolocationLayer);
-                        return geolocationLayer;
-                    };
+                    }
+                    initialGeolocationChange = true;
 
                     var _drawGeolocation = function(center, radius){
                         position = center;
-                        geolocationLayer = _refreshGeolocationLayer();
                         if (geolocationLayer !== null){
                             var geolocationSource = geolocationLayer.getSource();
                             geolocationSource.clear();
@@ -223,6 +210,17 @@ angular.module('processApp')
                     geolocation.on('change:accuracy', _geolocationChange);
                 },
 
+                resetGeolocation: function(map){
+                    if (geolocationLayer !== null){
+                        map.removeLayer(geolocationLayer);
+                    }
+                    position = undefined;
+                    geolocation = undefined;
+                    geolocationLayer = undefined;
+                    initialGeolocationChange = false;
+                    center = undefined;
+                },
+
                 generatePictureGuid: function () {
                     pictureGuid = _guid();
                 },
@@ -250,8 +248,6 @@ angular.module('processApp')
                 getMyLocation: function () {
                     return center;
                 }
-
-
 
             };
         }]
