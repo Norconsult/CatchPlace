@@ -354,10 +354,12 @@ angular.module('processApp')
                 });
                 map.addInteraction(select);
                 select.on('select', function(e) {
-                    if (e.selected && Array.isArray(e.selected) && e.selected.length > 0){
+                    if (e.selected && Array.isArray(e.selected) && e.selected.length > 0) {
                         var url = _createIconUrl(e.selected[0]);
                         console.log(url);
-                        window.open(url, '_blank');
+                        if (url) {
+                            window.open(url, '_blank');
+                        }
                     }
                 });
                 processAppFactory.registerMousePositionControl(map, '');
@@ -365,13 +367,16 @@ angular.module('processApp')
             };
 
             function _createIconUrl(feature){
-                var url = 'https://api.backendless.com/';
-                url += bkglesskey.appid;
-                url += '/';
-                url += bkglesskey.version;
-                url += '/files/my-folder/';
-                url += feature.getProperties().pictureGuid;
-                return url;
+                if (feature.getProperties().pictureGuid) {
+                    var url = 'https://api.backendless.com/';
+                    url += bkglesskey.appid;
+                    url += '/';
+                    url += bkglesskey.version;
+                    url += '/files/my-folder/';
+                    url += feature.getProperties().pictureGuid;
+                    return url;
+                }
+                return undefined;
             }
 
             function _delayedClosestPlacename(layer, center){
@@ -420,6 +425,7 @@ angular.module('processApp')
                 processAppFactory.resetGeolocation(map);
                 map = undefined;
                 geojsonlayer = {};
+                // oldCenter = undefined;
                 $scope.initMap();
                 $scope.getPoints();
                 //$timeout($scope.setMapHeight,10);
