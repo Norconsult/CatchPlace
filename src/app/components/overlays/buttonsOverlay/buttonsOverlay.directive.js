@@ -61,12 +61,12 @@ angular.module('buttonsOverlay')
                         Backendless.Geo.find( geoQuery, callback );
                     };
 
-                    document.getElementById('files').addEventListener('change', handleFileSelect, false);
+                    // document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
-                    function handleFileSelect(evt)
-                    {
-                        files = evt.target.files; // FileList object
-                    }
+                    // function handleFileSelect(evt)
+                    // {
+                    //     files = evt.target.files; // FileList object
+                    // }
 
                     // scope.getMyLocation = function () {
                     //
@@ -74,43 +74,47 @@ angular.module('buttonsOverlay')
                     //     console.log("Coor: ", coor);
                     // };
 
-                    scope.uploadFileFunc = function () {
+                    // scope.uploadFileFunc = function () {
+                    //
+                    //     // var callback =
+                    //         // function()
+                    //         // {
+                    //         //     Backendless.Files.renameFile( "/my-folder/"+processAppFactory.getOldFileName(), processAppFactory.getNewFileName() );
+                    //         // };
+                    //     var callback = {};
+                    //
+                    //     callback.success = function(result)
+                    //     {
+                    //         alert( "File successfully uploaded. Path to download: " + result.fileURL );
+                    //     };
+                    //
+                    //     callback.fault = function(result)
+                    //     {
+                    //         alert( "error - " + result.message );
+                    //     };
+                    //
+                    //     var fileSplitName = files[0].name.split(".");
+                    //
+                    //     processAppFactory.generatePictureGuid();
+                    //
+                    //     // console.log("Test: ", processAppFactory.getPictureGuid() + "." + fileSplitName[fileSplitName.length -1]);
+                    //
+                    //     processAppFactory.setOldFileName(files[0].name);
+                    //     processAppFactory.setNewFileName(processAppFactory.getPictureGuid() + "." + fileSplitName[fileSplitName.length -1]);
+                    //
+                    //     Backendless.Files.upload(files, "my-folder", callback);
+                    //
+                    //     $timeout(function() {
+                    //         Backendless.Files.renameFile( "/my-folder/"+processAppFactory.getOldFileName(), processAppFactory.getNewFileName() );
+                    //         var coor = scope._transformCoordinates(undefined, "EPSG:4326", processAppFactory.getMyLocation());
+                    //         scope.addPoint(coor);
+                    //     },4000);
+                    //
+                    // };
 
-                        // var callback =
-                            // function()
-                            // {
-                            //     Backendless.Files.renameFile( "/my-folder/"+processAppFactory.getOldFileName(), processAppFactory.getNewFileName() );
-                            // };
-                        var callback = {};
-
-                        callback.success = function(result)
-                        {
-                            alert( "File successfully uploaded. Path to download: " + result.fileURL );
-                        };
-
-                        callback.fault = function(result)
-                        {
-                            alert( "error - " + result.message );
-                        };
-
-                        var fileSplitName = files[0].name.split(".");
-
-                        processAppFactory.generatePictureGuid();
-
-                        // console.log("Test: ", processAppFactory.getPictureGuid() + "." + fileSplitName[fileSplitName.length -1]);
-
-                        processAppFactory.setOldFileName(files[0].name);
-                        processAppFactory.setNewFileName(processAppFactory.getPictureGuid() + "." + fileSplitName[fileSplitName.length -1]);
-
-                        Backendless.Files.upload(files, "my-folder", callback);
-
-                        $timeout(function() {
-                            Backendless.Files.renameFile( "/my-folder/"+processAppFactory.getOldFileName(), processAppFactory.getNewFileName() );
-                            var coor = scope._transformCoordinates(undefined, "EPSG:4326", processAppFactory.getMyLocation());
-                            scope.addPoint(coor);
-                        },4000);
-
-                    };
+                    if (false){
+                        console.log($timeout);
+                    }
 
                 }
             };
