@@ -54,7 +54,8 @@ angular.module('buttonsOverlay')
                         var geoQuery =
                         {
                             metadata: {ownerId: processAppFactory.getUserObjectId()},
-                            categories: ["catched_places"]
+                            categories: ["catched_places"],
+                            includeMetadata:true
                         };
                         //console.log("ownerId: ", processAppFactory.getUserObjectId());
                         Backendless.Geo.find( geoQuery, callback );
