@@ -111,7 +111,7 @@ angular.module('processApp')
             // var _getImageStyle = function(a, b){
             var _getImageStyle = function(feature, resolution){
                 if (feature) {
-                    if (resolution > 40){
+                    if (resolution > 99999999){//40){
                         return undefined;
                     }
                     // console.log(feature);
@@ -357,6 +357,7 @@ angular.module('processApp')
                     if (e.selected && Array.isArray(e.selected) && e.selected.length > 0){
                         var url = _createIconUrl(e.selected[0]);
                         console.log(url);
+                        window.open(url, '_blank');
                     }
                 });
                 processAppFactory.registerMousePositionControl(map, '');
