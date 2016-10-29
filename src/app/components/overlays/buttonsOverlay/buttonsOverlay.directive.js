@@ -53,7 +53,7 @@ angular.module('buttonsOverlay')
 
                         var geoQuery =
                         {
-                            metadata: {ownerId: processAppFactory.getUserObjectId()},
+                            // metadata: {ownerId: processAppFactory.getUserObjectId()},
                             categories: ["catched_places"],
                             includeMetadata:true
                         };
