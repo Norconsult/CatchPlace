@@ -407,5 +407,7 @@ angular.module('processApp')
             $($window).resize(function(){
                 $timeout($scope.setMapHeight,10);
             });
+
+
         }
     ]);
