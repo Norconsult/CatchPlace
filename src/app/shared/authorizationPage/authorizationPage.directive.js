@@ -10,11 +10,11 @@ angular.module('authorizationPage')
 
                     scope.login = function(){
                         console.log("login has been clicked");
-                        console.log("username: ", scope.username);
+                        console.log("username: ", scope.email);
                         console.log("password: ", scope.password);
                         try
                         {
-                            user = Backendless.UserService.login( scope.username, scope.password );
+                            user = Backendless.UserService.login( scope.email, scope.password );
                             console.log("User: ", user);
                             processAppFactory.setUserObjectId(user.objectId);
                             processAppFactory.setUserName(user.name);
