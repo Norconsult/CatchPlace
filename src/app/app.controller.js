@@ -1,6 +1,6 @@
 angular.module('processApp')
-    .controller('processAppController', ['$scope','$location','$timeout','$http','processAppFactory',
-        function($scope,$location,$timeout,$http,processAppFactory){
+    .controller('processAppController', ['$scope','$window','$location','$timeout','$http','processAppFactory',
+        function($scope,$window,$location,$timeout,$http,processAppFactory){
             var map;
             var oldCenter;
             var mapsrs = 'EPSG:25833';
@@ -238,13 +238,20 @@ angular.module('processApp')
                 }
             };
 
+            $scope.setMapHeight = function(){
+                // Set width and height
+                $('#map').height($(document).height() - $('[header-panel]').height());
+                $('#map').width($(document).width());
+                if (map) {
+                    map.updateSize();
+                }
+            };
+
             $scope.initMap = function(){
 
                 _loadCustomProj();
 
-                // Set width and height
-                $('#map').height($(document).height() - $('[header-panel]').height());
-                $('#map').width($(document).width());
+                $scope.setMapHeight();
 
                 var projection = new ol.proj.Projection({
                     code: mapsrs,
@@ -385,6 +392,9 @@ angular.module('processApp')
                 }
                 mapsrs = $location.search().srs.toUpperCase();
                 $scope.initMap();
+            });
+            $($window).resize(function(){
+                $timeout($scope.setMapHeight,10);
             });
         }
     ]);
