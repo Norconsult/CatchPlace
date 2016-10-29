@@ -121,12 +121,12 @@ angular.module('processApp')
                         });
                         map.addControl(mousePositionControl);
 
-                        var deviceOrientation = new ol.DeviceOrientation();
-                        deviceOrientation.on('change', function() {
-                            var view = map.getView();
-                            var gamma = deviceOrientation.getGamma() || 0;
-                            view.setRotation(gamma);
-                        });
+                        // var deviceOrientation = new ol.DeviceOrientation();
+                        // deviceOrientation.on('change', function() {
+                        //     var view = map.getView();
+                        //     var gamma = deviceOrientation.getGamma() || 0;
+                        //     view.setRotation(gamma);
+                        // });
                     }
                 },
 
