@@ -11,6 +11,7 @@ angular.module('processApp')
             var geolocationguid = 999999;
             var geolocationLayer;
             var initialGeolocationChange = false;
+            var center;
 
             function _guid() {
                 function s4() {
@@ -200,7 +201,7 @@ angular.module('processApp')
                         }
                     };
                     var _geolocationChange = function(){
-                        var center = geolocation.getPosition();
+                        center = geolocation.getPosition();
                         if (center === undefined){
                             return;
                         }
@@ -244,6 +245,10 @@ angular.module('processApp')
 
                 getNewFileName: function () {
                     return newFileName;
+                },
+
+                getMyLocation: function () {
+                    return center;
                 }
 
 
