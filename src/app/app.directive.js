@@ -28,6 +28,10 @@ angular.module('processApp')
                         Backendless.Geo.find( geoQuery, callback );
                     };
                     $scope.getPoints();
+
+                    $scope.imageShow = function(){
+                        return true;
+                    };
                 }
             };
         }

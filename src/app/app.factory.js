@@ -191,8 +191,8 @@ angular.module('processApp')
                                 geolocextent[2] += 5 * radius;
                                 geolocextent[3] += 5 * radius;
                                 map.getView().fit(geolocextent, map.getSize());
-                            } else {
-                                map.getView().setCenter(center);
+                            // } else {
+                            //     map.getView().setCenter(center);
                             }
                         }
                     };
