@@ -1,4 +1,4 @@
-describe ('headerMenuRight test', function(){
+xdescribe ('headerMenuRight test', function(){
 
     beforeEach(module('headerMenuRight', 'shared/header/headerMenuRight/headerMenuRight.html'));
     var element,
