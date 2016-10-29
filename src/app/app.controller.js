@@ -304,7 +304,6 @@ angular.module('processApp')
                     view: new ol.View({
                         projection: projection,
                         center: _transformCoordinates('EPSG:25833', mapsrs, [236304, 6676890]),
-                        enableRotation: false,
                         zoom: 10,
                         resolutions: mapResolutions,
                         maxResolution: newMapRes[0],
@@ -314,6 +313,13 @@ angular.module('processApp')
                     overlays: []
                 });
 
+                var select = new ol.interaction.Select({
+                    condition: ol.events.condition.click
+                });
+                map.addInteraction(select);
+                select.on('select', function(e) {
+                    console.log(e.selected);
+                });
                 processAppFactory.registerMousePositionControl(map, '');
                 processAppFactory.getGeolocation(map, _selectClosestPlacename);
             };
